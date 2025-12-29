@@ -3,6 +3,8 @@
  * GitHub README対応（SMIL/CSSアニメーション使用、JS不使用）
  */
 
+import { PRESS_START_2P_FONT_BASE64 } from './fontData';
+
 export interface SvgOptions {
   /** 表示テキスト（カンマ区切りで複数行対応） */
   text: string;
@@ -151,13 +153,21 @@ export function generateTypingSvg(options: Partial<SvgOptions>): string {
       />
     </rect>`;
 
-  // Google Fontsの参照（Press Start 2P）
-  const fontStyle = opts.font === 'Press Start 2P' ? `
+  // フォントスタイルを生成（Press Start 2P フォントをBase64埋め込み）
+  let fontStyle = '';
+  if (opts.font === 'Press Start 2P' && PRESS_START_2P_FONT_BASE64) {
+    fontStyle = `
   <defs>
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;display=swap');
+      @font-face {
+        font-family: 'Press Start 2P';
+        font-style: normal;
+        font-weight: 400;
+        src: url(data:font/woff2;base64,${PRESS_START_2P_FONT_BASE64}) format('woff2');
+      }
     </style>
-  </defs>` : '';
+  </defs>`;
+  }
 
   return `<svg
   xmlns="http://www.w3.org/2000/svg"
