@@ -145,36 +145,71 @@ function createQuestionBlock(x: number, y: number, delay: number = 0): string {
 }
 
 /**
- * 技術スタックアイコンを作成（シンプルなロゴ風）
+ * 技術名をskillicons.dev IDにマッピング
  */
-function createTechIcon(tech: string, x: number, y: number, delay: number, opts: MarioSvgOptions): string {
-  // 技術ごとの色とロゴ
-  const techConfig: Record<string, { color: string; logo: string }> = {
-    'React': { color: '#61DAFB', logo: '⚛' },
-    'Vue': { color: '#42B883', logo: 'V' },
-    'Angular': { color: '#DD0031', logo: 'A' },
-    'Java': { color: '#007396', logo: '☕' },
-    'Python': { color: '#3776AB', logo: '🐍' },
-    'Node': { color: '#339933', logo: '⬢' },
-    'TypeScript': { color: '#3178C6', logo: 'TS' },
-    'JavaScript': { color: '#F7DF1E', logo: 'JS' },
-    'Go': { color: '#00ADD8', logo: 'Go' },
-    'Rust': { color: '#000000', logo: '🦀' },
-    'PHP': { color: '#777BB4', logo: 'PHP' },
-    'Ruby': { color: '#CC342D', logo: '💎' },
-    'C++': { color: '#00599C', logo: 'C++' },
-    'Docker': { color: '#2496ED', logo: '🐳' },
-    'Kubernetes': { color: '#326CE5', logo: 'K8s' },
-    'AWS': { color: '#FF9900', logo: 'AWS' },
-    'Git': { color: '#F05032', logo: 'Git' },
+function mapTechToSkillIconId(tech: string): string {
+  const mapping: Record<string, string> = {
+    'React': 'react',
+    'Vue': 'vue',
+    'Angular': 'angular',
+    'Java': 'java',
+    'Python': 'python',
+    'Node': 'nodejs',
+    'TypeScript': 'ts',
+    'JavaScript': 'js',
+    'Go': 'go',
+    'Rust': 'rust',
+    'PHP': 'php',
+    'Ruby': 'ruby',
+    'C++': 'cpp',
+    'C': 'c',
+    'C#': 'cs',
+    'Docker': 'docker',
+    'Kubernetes': 'kubernetes',
+    'AWS': 'aws',
+    'Git': 'git',
+    'GitHub': 'github',
+    'GitLab': 'gitlab',
+    'HTML': 'html',
+    'CSS': 'css',
+    'MongoDB': 'mongodb',
+    'MySQL': 'mysql',
+    'PostgreSQL': 'postgresql',
+    'Redis': 'redis',
+    'Figma': 'figma',
+    'Linux': 'linux',
+    'VSCode': 'vscode',
+    'Django': 'django',
+    'Flask': 'flask',
+    'Laravel': 'laravel',
+    'Express': 'express',
+    'Kotlin': 'kotlin',
+    'Swift': 'swift',
+    'Flutter': 'flutter',
   };
 
-  const config = techConfig[tech] || { color: '#888888', logo: tech.substring(0, 2).toUpperCase() };
+  return mapping[tech] || tech.toLowerCase();
+}
+
+/**
+ * 技術スタックアイコンを作成（skillicons.dev使用）
+ */
+function createTechIcon(tech: string, x: number, y: number, delay: number, opts: MarioSvgOptions): string {
+  const iconId = mapTechToSkillIconId(tech);
+  const iconUrl = `https://skillicons.dev/icons?i=${iconId}`;
+  const iconSize = 50;
 
   return `
     <g id="tech-${tech}-${delay}">
-      <!-- アイコンの背景 -->
-      <rect x="${x}" y="${y}" width="50" height="50" rx="8" fill="${config.color}" stroke="#000" stroke-width="2">
+      <!-- skillicons.devのアイコン画像 -->
+      <image
+        x="${x}"
+        y="${y}"
+        width="${iconSize}"
+        height="${iconSize}"
+        href="${iconUrl}"
+        preserveAspectRatio="xMidYMid meet"
+      >
         <animate
           attributeName="opacity"
           values="1;1;0"
@@ -183,23 +218,10 @@ function createTechIcon(tech: string, x: number, y: number, delay: number, opts:
           begin="mario-hit-${tech}.begin"
           fill="freeze"
         />
-      </rect>
-
-      <!-- ロゴテキスト -->
-      <text x="${x + 25}" y="${y + 35}" font-size="24" font-weight="bold" fill="#FFF" text-anchor="middle">
-        ${escapeXml(config.logo)}
-        <animate
-          attributeName="opacity"
-          values="1;1;0"
-          keyTimes="0;0.9;1"
-          dur="0.3s"
-          begin="mario-hit-${tech}.begin"
-          fill="freeze"
-        />
-      </text>
+      </image>
 
       <!-- 技術名 -->
-      <text x="${x + 25}" y="${y + 68}" font-size="10" fill="#FFF" text-anchor="middle" font-family="'Press Start 2P', monospace">
+      <text x="${x + 25}" y="${y + 68}" font-size="10" fill="#FFF" text-anchor="middle" font-family="'Press Start 2P', monospace" stroke="#000" stroke-width="1" paint-order="stroke">
         ${escapeXml(tech)}
         <animate
           attributeName="opacity"
