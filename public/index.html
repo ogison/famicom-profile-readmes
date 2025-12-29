@@ -1,65 +1,447 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Typing SVG API</title>
+  <title>Typing SVG Generator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
+    * {
+      box-sizing: border-box;
+    }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: #1a1a2e;
       color: #eee;
       margin: 0;
-      padding: 40px;
+      padding: 20px;
       min-height: 100vh;
     }
     .container {
-      max-width: 800px;
+      max-width: 1200px;
       margin: 0 auto;
     }
     h1 {
       color: #e94560;
+      text-align: center;
+      margin-bottom: 10px;
     }
-    code {
+    .subtitle {
+      text-align: center;
+      color: #888;
+      margin-bottom: 30px;
+    }
+    .main-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+    @media (max-width: 900px) {
+      .main-content {
+        grid-template-columns: 1fr;
+      }
+    }
+    .panel {
       background: #16213e;
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-family: 'Courier New', monospace;
+      border-radius: 12px;
+      padding: 24px;
     }
-    pre {
-      background: #16213e;
-      padding: 16px;
-      border-radius: 8px;
-      overflow-x: auto;
-    }
-    a {
+    .panel-title {
       color: #e94560;
+      margin-top: 0;
+      margin-bottom: 20px;
+      font-size: 18px;
+      border-bottom: 1px solid #e9456033;
+      padding-bottom: 10px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      color: #aaa;
+      font-size: 14px;
+    }
+    input[type="text"],
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #0f3460;
+      border-radius: 6px;
+      background: #0f3460;
+      color: #fff;
+      font-size: 14px;
+      transition: border-color 0.2s;
+    }
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    select:focus {
+      outline: none;
+      border-color: #e94560;
+    }
+    .color-input-wrapper {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    input[type="color"] {
+      width: 50px;
+      height: 38px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      background: transparent;
+    }
+    .color-hex {
+      flex: 1;
+    }
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    .range-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    input[type="range"] {
+      flex: 1;
+      height: 6px;
+      border-radius: 3px;
+      background: #0f3460;
+      appearance: none;
+      cursor: pointer;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #e94560;
+      cursor: pointer;
+    }
+    .range-value {
+      min-width: 40px;
+      text-align: center;
+      color: #e94560;
+      font-weight: bold;
+    }
+    .preview-container {
+      background: #000;
+      border-radius: 8px;
+      padding: 20px;
+      min-height: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: auto;
+    }
+    .preview-container img {
+      max-width: 100%;
+      height: auto;
+    }
+    .url-section {
+      margin-top: 20px;
+    }
+    .url-wrapper {
+      display: flex;
+      gap: 10px;
+    }
+    .url-input {
+      flex: 1;
+      padding: 10px 12px;
+      border: 1px solid #0f3460;
+      border-radius: 6px;
+      background: #0f3460;
+      color: #00ff00;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      word-break: break-all;
+    }
+    .copy-btn {
+      padding: 10px 20px;
+      background: #e94560;
+      border: none;
+      border-radius: 6px;
+      color: #fff;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+    .copy-btn:hover {
+      background: #ff6b6b;
+    }
+    .copy-btn.copied {
+      background: #00c853;
+    }
+    .markdown-section {
+      margin-top: 15px;
+    }
+    .markdown-code {
+      padding: 10px 12px;
+      border: 1px solid #0f3460;
+      border-radius: 6px;
+      background: #0f3460;
+      color: #ffcc00;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      word-break: break-all;
+      width: 100%;
+    }
+    .section-label {
+      color: #888;
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+    .refresh-btn {
+      padding: 12px 24px;
+      background: #0f3460;
+      border: 2px solid #e94560;
+      border-radius: 6px;
+      color: #e94560;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s;
+      width: 100%;
+      margin-top: 10px;
+    }
+    .refresh-btn:hover {
+      background: #e94560;
+      color: #fff;
+    }
+    .hint {
+      font-size: 12px;
+      color: #666;
+      margin-top: 4px;
+    }
+    .font-preview {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 10px;
+      color: #e94560;
+      margin-top: 4px;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Typing SVG API</h1>
-    <p>Generate animated typing SVGs for your GitHub README.</p>
+    <h1>Typing SVG Generator</h1>
+    <p class="subtitle">GitHub README用のタイピングアニメーションSVGを生成</p>
 
-    <h2>Usage</h2>
-    <pre><code>GET /api/typing?text=YOUR+TEXT</code></pre>
+    <div class="main-content">
+      <div class="panel">
+        <h2 class="panel-title">Settings</h2>
 
-    <h2>Parameters</h2>
-    <ul>
-      <li><code>text</code> - Text to display (default: "HELLO WORLD")</li>
-      <li><code>fontSize</code> - Font size in pixels (default: 32)</li>
-      <li><code>width</code> - SVG width (default: 600)</li>
-      <li><code>height</code> - SVG height (default: 80)</li>
-      <li><code>color</code> - Text color hex without # (default: E80000)</li>
-      <li><code>bg</code> - Background color hex without # (default: 000000)</li>
-      <li><code>speed</code> - Typing speed 1-10 (default: 3)</li>
-      <li><code>font</code> - Font family (default: "Press Start 2P")</li>
-    </ul>
+        <div class="form-group">
+          <label for="text">テキスト</label>
+          <input type="text" id="text" value="HELLO WORLD" placeholder="表示するテキストを入力">
+          <p class="hint">カンマで区切ると複数行になります（例: Hello,World）</p>
+        </div>
 
-    <h2>Example</h2>
-    <p><a href="/api/typing?text=HELLO+WORLD&color=E80000&bg=1a1a2e">/api/typing?text=HELLO+WORLD&color=E80000&bg=1a1a2e</a></p>
+        <div class="row">
+          <div class="form-group">
+            <label for="width">横幅 (px)</label>
+            <input type="number" id="width" value="600" min="100" max="1200">
+          </div>
+          <div class="form-group">
+            <label for="height">高さ (px)</label>
+            <input type="number" id="height" value="80" min="30" max="500">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="fontSize">フォントサイズ</label>
+          <div class="range-wrapper">
+            <input type="range" id="fontSize" value="32" min="8" max="72">
+            <span class="range-value" id="fontSizeValue">32</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="speed">タイピング速度</label>
+          <div class="range-wrapper">
+            <input type="range" id="speed" value="3" min="1" max="10">
+            <span class="range-value" id="speedValue">3</span>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group">
+            <label for="color">テキスト色</label>
+            <div class="color-input-wrapper">
+              <input type="color" id="colorPicker" value="#e80000">
+              <input type="text" id="color" value="E80000" class="color-hex" maxlength="6">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="bg">背景色</label>
+            <div class="color-input-wrapper">
+              <input type="color" id="bgPicker" value="#000000">
+              <input type="text" id="bg" value="000000" class="color-hex" maxlength="6">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="font">フォント</label>
+          <select id="font">
+            <option value="Press Start 2P" selected>Press Start 2P (ピクセル風)</option>
+            <option value="Courier New">Courier New (等幅)</option>
+            <option value="Arial">Arial</option>
+            <option value="Georgia">Georgia</option>
+            <option value="Impact">Impact</option>
+          </select>
+          <p class="font-preview" id="fontPreview">Sample Text</p>
+        </div>
+
+        <button class="refresh-btn" onclick="updatePreview()">プレビューを更新</button>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title">Preview</h2>
+
+        <div class="preview-container" id="previewContainer">
+          <img id="preview" alt="SVG Preview">
+        </div>
+
+        <div class="url-section">
+          <p class="section-label">API URL</p>
+          <div class="url-wrapper">
+            <input type="text" id="apiUrl" class="url-input" readonly>
+            <button class="copy-btn" onclick="copyUrl()">コピー</button>
+          </div>
+        </div>
+
+        <div class="markdown-section">
+          <p class="section-label">Markdown (README用)</p>
+          <div class="url-wrapper">
+            <input type="text" id="markdownCode" class="markdown-code" readonly>
+            <button class="copy-btn" onclick="copyMarkdown()">コピー</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+
+  <script>
+    const baseUrl = window.location.origin;
+
+    // Elements
+    const textInput = document.getElementById('text');
+    const widthInput = document.getElementById('width');
+    const heightInput = document.getElementById('height');
+    const fontSizeInput = document.getElementById('fontSize');
+    const fontSizeValue = document.getElementById('fontSizeValue');
+    const speedInput = document.getElementById('speed');
+    const speedValue = document.getElementById('speedValue');
+    const colorInput = document.getElementById('color');
+    const colorPicker = document.getElementById('colorPicker');
+    const bgInput = document.getElementById('bg');
+    const bgPicker = document.getElementById('bgPicker');
+    const fontSelect = document.getElementById('font');
+    const fontPreview = document.getElementById('fontPreview');
+    const preview = document.getElementById('preview');
+    const apiUrlInput = document.getElementById('apiUrl');
+    const markdownCode = document.getElementById('markdownCode');
+
+    // Sync color picker with hex input
+    colorPicker.addEventListener('input', (e) => {
+      colorInput.value = e.target.value.substring(1).toUpperCase();
+      updatePreview();
+    });
+
+    colorInput.addEventListener('input', (e) => {
+      const hex = e.target.value.replace(/[^0-9A-Fa-f]/g, '').substring(0, 6);
+      colorInput.value = hex.toUpperCase();
+      if (hex.length === 6) {
+        colorPicker.value = '#' + hex;
+      }
+    });
+
+    bgPicker.addEventListener('input', (e) => {
+      bgInput.value = e.target.value.substring(1).toUpperCase();
+      updatePreview();
+    });
+
+    bgInput.addEventListener('input', (e) => {
+      const hex = e.target.value.replace(/[^0-9A-Fa-f]/g, '').substring(0, 6);
+      bgInput.value = hex.toUpperCase();
+      if (hex.length === 6) {
+        bgPicker.value = '#' + hex;
+      }
+    });
+
+    // Update range value displays
+    fontSizeInput.addEventListener('input', () => {
+      fontSizeValue.textContent = fontSizeInput.value;
+    });
+
+    speedInput.addEventListener('input', () => {
+      speedValue.textContent = speedInput.value;
+    });
+
+    // Update font preview
+    fontSelect.addEventListener('change', () => {
+      fontPreview.style.fontFamily = fontSelect.value;
+      updatePreview();
+    });
+
+    // Auto update on input change
+    const inputs = [textInput, widthInput, heightInput, fontSizeInput, speedInput, colorInput, bgInput];
+    inputs.forEach(input => {
+      input.addEventListener('change', updatePreview);
+    });
+
+    function buildUrl() {
+      const params = new URLSearchParams();
+      params.set('text', textInput.value);
+      params.set('width', widthInput.value);
+      params.set('height', heightInput.value);
+      params.set('fontSize', fontSizeInput.value);
+      params.set('speed', speedInput.value);
+      params.set('color', colorInput.value);
+      params.set('bg', bgInput.value);
+      params.set('font', fontSelect.value);
+
+      return `${baseUrl}/api/typing?${params.toString()}`;
+    }
+
+    function updatePreview() {
+      const url = buildUrl();
+      preview.src = url;
+      apiUrlInput.value = url;
+      markdownCode.value = `![Typing SVG](${url})`;
+    }
+
+    function copyUrl() {
+      navigator.clipboard.writeText(apiUrlInput.value).then(() => {
+        const btn = event.target;
+        btn.textContent = 'コピー完了!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'コピー';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    }
+
+    function copyMarkdown() {
+      navigator.clipboard.writeText(markdownCode.value).then(() => {
+        const btn = event.target;
+        btn.textContent = 'コピー完了!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'コピー';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    }
+
+    // Initial preview
+    updatePreview();
+  </script>
 </body>
 </html>
-</code></pre>
