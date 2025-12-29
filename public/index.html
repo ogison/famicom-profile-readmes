@@ -236,9 +236,23 @@
         <h2 class="panel-title">Settings</h2>
 
         <div class="form-group">
+          <label for="mode">アニメーションモード</label>
+          <select id="mode">
+            <option value="typing">タイピング風</option>
+            <option value="mario">マリオ風（技術スタック）</option>
+          </select>
+        </div>
+
+        <div class="form-group">
           <label for="text">テキスト</label>
           <input type="text" id="text" value="HELLO WORLD" placeholder="表示するテキストを入力">
-          <p class="hint">カンマで区切ると複数行になります（例: Hello,World）</p>
+          <p class="hint" id="textHint">カンマで区切ると複数行になります（例: Hello,World）</p>
+        </div>
+
+        <div class="form-group" id="skillsGroup" style="display:none;">
+          <label for="skills">技術スタック（マリオモード用）</label>
+          <input type="text" id="skills" value="React,Vue,Java,Python,Node" placeholder="技術スタックをカンマ区切りで入力">
+          <p class="hint">倒す技術のアイコンを指定します</p>
         </div>
 
         <div class="row">
@@ -330,7 +344,11 @@
     const baseUrl = window.location.origin;
 
     // Elements
+    const modeSelect = document.getElementById('mode');
     const textInput = document.getElementById('text');
+    const skillsInput = document.getElementById('skills');
+    const skillsGroup = document.getElementById('skillsGroup');
+    const textHint = document.getElementById('textHint');
     const widthInput = document.getElementById('width');
     const heightInput = document.getElementById('height');
     const fontSizeInput = document.getElementById('fontSize');
@@ -346,6 +364,35 @@
     const preview = document.getElementById('preview');
     const apiUrlInput = document.getElementById('apiUrl');
     const markdownCode = document.getElementById('markdownCode');
+
+    // Mode change handler
+    modeSelect.addEventListener('change', () => {
+      const isMarioMode = modeSelect.value === 'mario';
+
+      if (isMarioMode) {
+        skillsGroup.style.display = 'block';
+        textInput.value = 'FULL STACK DEVELOPER';
+        textHint.textContent = 'プロフィールのタイトルを入力してください';
+        widthInput.value = 800;
+        heightInput.value = 250;
+        bgInput.value = '5C94FC';
+        bgPicker.value = '#5C94FC';
+        colorInput.value = 'FFFF00';
+        colorPicker.value = '#FFFF00';
+      } else {
+        skillsGroup.style.display = 'none';
+        textInput.value = 'HELLO WORLD';
+        textHint.textContent = 'カンマで区切ると複数行になります（例: Hello,World）';
+        widthInput.value = 600;
+        heightInput.value = 80;
+        bgInput.value = '000000';
+        bgPicker.value = '#000000';
+        colorInput.value = 'E80000';
+        colorPicker.value = '#E80000';
+      }
+
+      updatePreview();
+    });
 
     // Sync color picker with hex input
     colorPicker.addEventListener('input', (e) => {
@@ -396,17 +443,24 @@
     });
 
     function buildUrl() {
+      const isMarioMode = modeSelect.value === 'mario';
       const params = new URLSearchParams();
+
       params.set('text', textInput.value);
       params.set('width', widthInput.value);
       params.set('height', heightInput.value);
       params.set('fontSize', fontSizeInput.value);
-      params.set('speed', speedInput.value);
       params.set('color', colorInput.value);
       params.set('bg', bgInput.value);
       params.set('font', fontSelect.value);
 
-      return `${baseUrl}/api/typing?${params.toString()}`;
+      if (isMarioMode) {
+        params.set('skills', skillsInput.value);
+        return `${baseUrl}/api/mario?${params.toString()}`;
+      } else {
+        params.set('speed', speedInput.value);
+        return `${baseUrl}/api/typing?${params.toString()}`;
+      }
     }
 
     function updatePreview() {
