@@ -5,6 +5,7 @@
   "main": "api/typing.ts",
   "scripts": {
     "dev": "vercel dev",
+    "prebuild": "npx ts-node scripts/generateFontData.ts",
     "build": "tsc --noEmit",
     "lint": "tsc --noEmit"
   },
@@ -23,5 +24,8 @@
     "@vercel/node": "^3.0.0",
     "typescript": "^5.3.0",
     "vercel": "^33.0.0"
+  },
+  "dependencies": {
+    "@fontsource/press-start-2p": "^5.2.7"
   }
 }
