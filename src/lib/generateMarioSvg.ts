@@ -1,5 +1,5 @@
 /**
- * マリオ風SVG生成ライブラリ
+ * GitHub Octocat風SVG生成ライブラリ（ファミコン風ドット絵アニメーション）
  * GitHub README対応（SMIL/CSSアニメーション使用、JS不使用）
  */
 
@@ -63,24 +63,59 @@ function escapeXml(str: string): string {
 }
 
 /**
- * マリオキャラクターをドット絵で描画（簡略版）
+ * Octocatキャラクターをドット絵で描画（3つのバリエーション）
  */
-function createMarioCharacter(x: number, y: number, scale: number = 1): string {
+function createOctocatCharacter(x: number, y: number, scale: number = 1, variant: number = 0): string {
   const s = scale * 3; // ピクセルサイズ
 
-  // マリオの簡略版ドット絵（8x8ピクセル）
-  const pixels = [
-    [0,0,1,1,1,1,0,0], // 帽子
-    [0,1,1,1,1,1,1,0],
-    [0,2,2,3,3,2,0,0], // 顔
-    [0,2,3,3,3,2,2,0],
-    [0,2,3,3,3,2,2,2],
-    [0,0,3,3,3,3,0,0],
-    [0,4,1,4,4,1,4,0], // 体
-    [4,4,4,0,0,4,4,4], // 足
+  // Octocatのドット絵パターン（10x10ピクセル、3種類のバリエーション）
+  const octocatVariants = [
+    // バリエーション1: 正面向き基本形
+    [
+      [0,0,0,1,0,0,1,0,0,0], // 猫耳
+      [0,0,1,1,0,0,1,1,0,0],
+      [0,1,2,2,2,2,2,2,1,0], // 頭
+      [1,2,2,3,2,2,3,2,2,1],
+      [1,2,2,2,2,2,2,2,2,1], // 顔
+      [1,2,2,4,4,4,4,2,2,1],
+      [0,1,2,2,2,2,2,2,1,0], // 体
+      [0,0,1,1,1,1,1,1,0,0],
+      [0,1,0,1,0,0,1,0,1,0], // タコの足
+      [1,0,0,0,0,0,0,0,0,1],
+    ],
+    // バリエーション2: 走っている形（足が動いている）
+    [
+      [0,0,0,1,0,0,1,0,0,0], // 猫耳
+      [0,0,1,1,0,0,1,1,0,0],
+      [0,1,2,2,2,2,2,2,1,0], // 頭
+      [1,2,2,3,2,2,3,2,2,1],
+      [1,2,2,2,2,2,2,2,2,1], // 顔
+      [1,2,2,4,4,4,4,2,2,1],
+      [0,1,2,2,2,2,2,2,1,0], // 体
+      [0,0,1,1,1,1,1,1,0,0],
+      [0,0,1,0,1,1,0,1,0,0], // タコの足（動き1）
+      [0,1,0,0,0,0,0,0,1,0],
+    ],
+    // バリエーション3: ジャンプしている形
+    [
+      [0,0,0,1,0,0,1,0,0,0], // 猫耳
+      [0,0,1,1,0,0,1,1,0,0],
+      [0,1,2,2,2,2,2,2,1,0], // 頭
+      [1,2,2,3,2,2,3,2,2,1],
+      [1,2,2,2,2,2,2,2,2,1], // 顔
+      [1,2,2,4,4,4,4,2,2,1],
+      [0,1,2,2,2,2,2,2,1,0], // 体
+      [0,0,1,1,1,1,1,1,0,0],
+      [1,0,0,1,0,0,1,0,0,1], // タコの足（広がっている）
+      [0,1,0,0,0,0,0,0,1,0],
+    ],
   ];
 
-  const colors = ['none', '#E80000', '#FFB991', '#000000', '#0000FF'];
+  // 色の定義（GitHub Octocat風）
+  // 0: 透明, 1: 黒（アウトライン）, 2: グレー（体）, 3: 白（目）, 4: ピンク（口）
+  const colors = ['none', '#24292f', '#6e7781', '#ffffff', '#ff69b4'];
+
+  const pixels = octocatVariants[variant % 3];
 
   let pixelsSvg = '';
   pixels.forEach((row, i) => {
@@ -265,7 +300,7 @@ function createTechIcon(tech: string, x: number, y: number, delay: number, opts:
 }
 
 /**
- * マリオが走って技術アイコンを倒すアニメーション
+ * Octocatが走って技術アイコンを倒すアニメーション
  */
 function generateRunningMario(opts: MarioSvgOptions): string {
   const color = normalizeColor(opts.color);
@@ -274,21 +309,53 @@ function generateRunningMario(opts: MarioSvgOptions): string {
   // 技術スタックを解析
   const skills = opts.skills.split(',').map(s => s.trim()).filter(s => s.length > 0);
 
-  // マリオの位置
-  const marioY = opts.height - 120;
-  const marioX = 100;
+  // Octocatの位置
+  const octocatY = opts.height - 130;
+  const octocatX = 100;
 
-  // マリオキャラクター（走るアニメーション）
-  const mario = `
-    <g id="mario-runner">
-      ${createMarioCharacter(marioX, marioY, 2.5)}
-      <!-- 走るアニメーション（足の動き） -->
+  // Octocatキャラクター（3つのバリエーションを切り替えながら走るアニメーション）
+  const octocat = `
+    <g id="octocat-runner">
+      <!-- バリエーション1: 基本形 -->
+      <g id="octocat-var-0">
+        ${createOctocatCharacter(octocatX, octocatY, 2.2, 0)}
+        <animate
+          attributeName="opacity"
+          values="1;0;0;1"
+          keyTimes="0;0.33;0.67;1"
+          dur="0.6s"
+          repeatCount="indefinite"
+        />
+      </g>
+      <!-- バリエーション2: 走り -->
+      <g id="octocat-var-1">
+        ${createOctocatCharacter(octocatX, octocatY, 2.2, 1)}
+        <animate
+          attributeName="opacity"
+          values="0;1;0;0"
+          keyTimes="0;0.33;0.67;1"
+          dur="0.6s"
+          repeatCount="indefinite"
+        />
+      </g>
+      <!-- バリエーション3: ジャンプ -->
+      <g id="octocat-var-2">
+        ${createOctocatCharacter(octocatX, octocatY, 2.2, 2)}
+        <animate
+          attributeName="opacity"
+          values="0;0;1;0"
+          keyTimes="0;0.33;0.67;1"
+          dur="0.6s"
+          repeatCount="indefinite"
+        />
+      </g>
+      <!-- 走るアニメーション（上下の動き） -->
       <animateTransform
         attributeName="transform"
         type="translate"
-        values="0,0; 0,2; 0,0; 0,-2; 0,0"
+        values="0,0; 0,3; 0,0; 0,-3; 0,0"
         keyTimes="0;0.25;0.5;0.75;1"
-        dur="0.4s"
+        dur="0.6s"
         repeatCount="indefinite"
       />
     </g>`;
@@ -296,7 +363,7 @@ function generateRunningMario(opts: MarioSvgOptions): string {
   // 技術アイコンを生成（右から流れてくる）
   const techIcons = skills.map((tech, i) => {
     const startX = opts.width + 100 + (i * 150);
-    const iconY = marioY - 10;
+    const iconY = octocatY - 10;
     const delay = 2 + (i * 1.2); // 順番に出現
 
     return createTechIcon(tech, startX, iconY, delay, opts);
@@ -346,7 +413,7 @@ function generateRunningMario(opts: MarioSvgOptions): string {
     const delay = 2 + (i * 1.2) + 2.5; // アイコンが倒される時間
     return `
       <g>
-        ${createCoin(marioX + 60, marioY - 20, delay)}
+        ${createCoin(octocatX + 70, octocatY - 20, delay)}
         <animateTransform
           attributeName="transform"
           type="translate"
@@ -367,18 +434,18 @@ function generateRunningMario(opts: MarioSvgOptions): string {
                onbegin="document.getElementById('tech-${tech}-${2 + (i * 1.2)}').getElementsByTagName('animateTransform')[3].beginElement();" />`;
   }).join('');
 
-  return `${mario}${techIcons}${text}${scoreText}${coinEffects}`;
+  return `${octocat}${techIcons}${text}${scoreText}${coinEffects}`;
 }
 
 /**
- * マリオ風SVGを生成
+ * GitHub Octocat風SVGを生成（ファミコン風ドット絵）
  */
 export function generateMarioSvg(options: Partial<MarioSvgOptions>): string {
   const opts: MarioSvgOptions = { ...defaultMarioOptions, ...options };
 
   const bg = normalizeColor(opts.bg);
 
-  // マリオが走って技術を倒すアニメーション
+  // Octocatが走って技術を倒すアニメーション
   const content = generateRunningMario(opts);
 
   // フォントスタイルを生成（Press Start 2P フォントをBase64埋め込み）
@@ -397,7 +464,7 @@ export function generateMarioSvg(options: Partial<MarioSvgOptions>): string {
   </defs>`;
   }
 
-  // 地面を追加（マリオらしさを出すため）
+  // 地面を追加（レトロゲーム風）
   const ground = `
     <rect x="0" y="${opts.height - 40}" width="${opts.width}" height="40" fill="#8B4513"/>
     <rect x="0" y="${opts.height - 38}" width="${opts.width}" height="4" fill="#A0522D"/>`;

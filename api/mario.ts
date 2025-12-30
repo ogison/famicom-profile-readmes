@@ -2,7 +2,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { generateMarioSvg, defaultMarioOptions } from '../src/lib/generateMarioSvg';
 
 /**
- * マリオ風SVG生成APIエンドポイント
+ * GitHub Octocat風SVG生成APIエンドポイント（ファミコン風ドット絵アニメーション）
  *
  * 使用例:
  * GET /api/mario?text=FULL+STACK+DEVELOPER&skills=React,Vue,Java,Python&bg=5C94FC
