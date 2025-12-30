@@ -196,7 +196,7 @@ function mapTechToSkillIconId(tech: string): string {
  */
 function createTechIcon(tech: string, x: number, y: number, delay: number, opts: MarioSvgOptions): string {
   const iconId = mapTechToSkillIconId(tech);
-  const iconUrl = `https://skillicons.dev/icons?i=${iconId}`;
+  const iconUrl = `https://skillicons.dev/icons?i=${iconId}&theme=dark&perline=1`;
   const iconSize = 50;
 
   return `
