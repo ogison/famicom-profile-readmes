@@ -28,7 +28,7 @@ export interface MarioSvgOptions {
 export const defaultMarioOptions: MarioSvgOptions = {
   text: 'FULL STACK DEVELOPER',
   fontSize: 24,
-  width: 800,
+  width: 400,
   height: 250,
   color: 'FFFF00',
   bg: '5C94FC',
@@ -378,9 +378,9 @@ function generateRunningMario(opts: MarioSvgOptions): string {
     .map((s) => s.trim())
     .filter((s) => s.length > 0);
 
-  // Octocatの位置
+  // Octocatの位置（横幅400に合わせて左寄せ）
   const octocatY = opts.height - 130;
-  const octocatX = 100;
+  const octocatX = 50;
 
   // Octocatキャラクター（3つのバリエーションを切り替えながら走るアニメーション）
   const octocat = `
@@ -432,9 +432,9 @@ function generateRunningMario(opts: MarioSvgOptions): string {
   // 技術アイコンを生成（右から流れてくる）
   const techIcons = skills
     .map((tech, i) => {
-      const startX = opts.width + 100 + i * 150;
+      const startX = opts.width + 50 + i * 100; // 横幅400に合わせて間隔を調整
       const iconY = octocatY - 10;
-      const delay = 2 + i * 1.2; // 順番に出現
+      const delay = 1.5 + i * 1.0; // 順番に出現（テンポを速く）
 
       return createTechIcon(tech, startX, iconY, delay, opts, i, octocatX);
     })
@@ -466,8 +466,8 @@ function generateRunningMario(opts: MarioSvgOptions): string {
 
   const coinEffects = skills
     .map((tech, i) => {
-      const startX = opts.width + 100 + i * 150;
-      const delay = 2 + i * 1.2;
+      const startX = opts.width + 50 + i * 100; // 技術アイコンと同じ計算式
+      const delay = 1.5 + i * 1.0; // 技術アイコンと同じタイミング
       // 各アイコンの移動距離（開始位置から画面外まで）
       const totalMoveDistance = startX + 100;
       const moveToCollision = startX - collisionX;
