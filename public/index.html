@@ -139,9 +139,11 @@
       justify-content: center;
       overflow: auto;
     }
-    .preview-container img {
+    .preview-container img,
+    .preview-container object {
       max-width: 100%;
       height: auto;
+      display: block;
     }
     .url-section {
       margin-top: 20px;
@@ -318,7 +320,9 @@
         <h2 class="panel-title">Preview</h2>
 
         <div class="preview-container" id="previewContainer">
-          <img id="preview" alt="SVG Preview">
+          <object id="preview" type="image/svg+xml" data="">
+            <img id="previewFallback" alt="SVG Preview">
+          </object>
         </div>
 
         <div class="url-section">
@@ -465,7 +469,12 @@
 
     function updatePreview() {
       const url = buildUrl();
-      preview.src = url;
+      preview.data = url;
+      // フォールバック用のimg要素も更新
+      const fallbackImg = document.getElementById('previewFallback');
+      if (fallbackImg) {
+        fallbackImg.src = url;
+      }
       apiUrlInput.value = url;
       markdownCode.value = `![Typing SVG](${url})`;
     }
