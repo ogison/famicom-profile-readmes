@@ -22,6 +22,10 @@ export interface MarioSvgOptions {
   skills: string;
   /** フォントファミリー */
   font: string;
+  /** skillicons.devのアイコンを使用するか */
+  useSkillIcons: boolean;
+  /** skilliconsのテーマ（light/dark） */
+  skillIconsTheme: 'light' | 'dark';
 }
 
 /** デフォルト設定 */
@@ -34,6 +38,8 @@ export const defaultMarioOptions: MarioSvgOptions = {
   bg: '5C94FC',
   skills: 'React,Vue,Java,Python,Node',
   font: 'Press Start 2P',
+  useSkillIcons: false,
+  skillIconsTheme: 'dark',
 };
 
 /**
@@ -185,6 +191,89 @@ function createQuestionBlock(x: number, y: number, delay: number = 0): string {
 }
 
 /**
+ * 技術名からskillicons.devのアイコン名を取得
+ */
+function getSkillIconName(tech: string): string {
+  const mapping: Record<string, string> = {
+    React: 'react',
+    Vue: 'vue',
+    Angular: 'angular',
+    Java: 'java',
+    Python: 'python',
+    Node: 'nodejs',
+    TypeScript: 'ts',
+    JavaScript: 'js',
+    Go: 'go',
+    Rust: 'rust',
+    PHP: 'php',
+    Ruby: 'ruby',
+    'C++': 'cpp',
+    C: 'c',
+    'C#': 'cs',
+    Docker: 'docker',
+    Kubernetes: 'kubernetes',
+    AWS: 'aws',
+    Git: 'git',
+    GitHub: 'github',
+    GitLab: 'gitlab',
+    HTML: 'html',
+    CSS: 'css',
+    MongoDB: 'mongodb',
+    MySQL: 'mysql',
+    PostgreSQL: 'postgres',
+    Redis: 'redis',
+    Figma: 'figma',
+    Linux: 'linux',
+    VSCode: 'vscode',
+    Django: 'django',
+    Flask: 'flask',
+    Laravel: 'laravel',
+    Express: 'express',
+    Kotlin: 'kotlin',
+    Swift: 'swift',
+    Flutter: 'flutter',
+    NextJS: 'nextjs',
+    NuxtJS: 'nuxtjs',
+    Svelte: 'svelte',
+    Tailwind: 'tailwind',
+    Bootstrap: 'bootstrap',
+    Sass: 'sass',
+    Webpack: 'webpack',
+    Vite: 'vite',
+    Firebase: 'firebase',
+    Supabase: 'supabase',
+    GraphQL: 'graphql',
+    Prisma: 'prisma',
+    Vercel: 'vercel',
+    Netlify: 'netlify',
+    Heroku: 'heroku',
+    Nginx: 'nginx',
+    Bash: 'bash',
+    PowerShell: 'powershell',
+    Vim: 'vim',
+    Neovim: 'neovim',
+    Electron: 'electron',
+    'React Native': 'react',
+    Unity: 'unity',
+    Unreal: 'unreal',
+    Blender: 'blender',
+    Postman: 'postman',
+    Jest: 'jest',
+    Cypress: 'cypress',
+    Selenium: 'selenium',
+    Jenkins: 'jenkins',
+    Azure: 'azure',
+    GCP: 'gcp',
+    Cloudflare: 'cloudflare',
+    DigitalOcean: 'digitalocean',
+    Terraform: 'terraform',
+    Ansible: 'ansible',
+  };
+
+  return mapping[tech] || tech.toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+
+/**
  * 技術名に対応するカラーを取得
  */
 function getTechColor(tech: string): { bg: string; text: string } {
@@ -249,7 +338,7 @@ function getFlyDirection(index: number): { x: number; y: number } {
 }
 
 /**
- * 技術スタックアイコンを作成（ファミコン風ピクセルアートバッジ）
+ * 技術スタックアイコンを作成（ファミコン風ピクセルアートバッジまたはskillicons.dev）
  */
 function createTechIcon(
   tech: string,
@@ -284,8 +373,25 @@ function createTechIcon(
   // ヒット時間を計算（アイコンが衝突位置に到達する時間）
   const hitTime = delay + (moveToCollision / totalMoveDistance) * animationDuration;
 
-  // ファミコン風のピクセルアートバッジ
-  const badge = `
+  // skillicons.devを使用する場合
+  let badge: string;
+  if (opts.useSkillIcons) {
+    const skillIconName = getSkillIconName(tech);
+    const skillIconUrl = `https://skillicons.dev/icons?i=${skillIconName}&theme=${opts.skillIconsTheme}`;
+    badge = `
+    <!-- skillicons.devアイコン -->
+    <image
+      x="${x}"
+      y="${y}"
+      width="${iconSize}"
+      height="${iconSize}"
+      href="${skillIconUrl}"
+      preserveAspectRatio="xMidYMid meet"
+    />
+  `;
+  } else {
+    // ファミコン風のピクセルアートバッジ
+    badge = `
     <!-- バッジ背景（ピクセル風の角丸） -->
     <rect x="${x + pixelSize}" y="${y}" width="${iconSize - pixelSize * 2}" height="${pixelSize}" fill="${colors.bg}"/>
     <rect x="${x}" y="${y + pixelSize}" width="${iconSize}" height="${iconSize - pixelSize * 2}" fill="${colors.bg}"/>
@@ -308,6 +414,7 @@ function createTechIcon(
       font-family="'Press Start 2P', monospace"
     >${escapeXml(tech.charAt(0).toUpperCase())}</text>
   `;
+  }
 
   return `
     <g id="tech-${tech}-${delay}">
