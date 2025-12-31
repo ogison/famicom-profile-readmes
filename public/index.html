@@ -245,7 +245,7 @@
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" id="textGroup">
           <label for="text">テキスト</label>
           <input type="text" id="text" value="HELLO WORLD" placeholder="表示するテキストを入力">
           <p class="hint" id="textHint">カンマで区切ると複数行になります（例: Hello,World）</p>
@@ -350,6 +350,7 @@
     // Elements
     const modeSelect = document.getElementById('mode');
     const textInput = document.getElementById('text');
+    const textGroup = document.getElementById('textGroup');
     const skillsInput = document.getElementById('skills');
     const skillsGroup = document.getElementById('skillsGroup');
     const textHint = document.getElementById('textHint');
@@ -375,8 +376,7 @@
 
       if (isMarioMode) {
         skillsGroup.style.display = 'block';
-        textInput.value = 'FULL STACK DEVELOPER';
-        textHint.textContent = 'プロフィールのタイトルを入力してください';
+        textGroup.style.display = 'none';
         widthInput.value = 800;
         heightInput.value = 250;
         bgInput.value = '5C94FC';
@@ -385,6 +385,7 @@
         colorPicker.value = '#FFFF00';
       } else {
         skillsGroup.style.display = 'none';
+        textGroup.style.display = 'block';
         textInput.value = 'HELLO WORLD';
         textHint.textContent = 'カンマで区切ると複数行になります（例: Hello,World）';
         widthInput.value = 600;
@@ -450,7 +451,6 @@
       const isMarioMode = modeSelect.value === 'mario';
       const params = new URLSearchParams();
 
-      params.set('text', textInput.value);
       params.set('width', widthInput.value);
       params.set('height', heightInput.value);
       params.set('fontSize', fontSizeInput.value);
@@ -462,6 +462,7 @@
         params.set('skills', skillsInput.value);
         return `${baseUrl}/api/mario?${params.toString()}`;
       } else {
+        params.set('text', textInput.value);
         params.set('speed', speedInput.value);
         return `${baseUrl}/api/typing?${params.toString()}`;
       }
