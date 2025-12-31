@@ -284,7 +284,7 @@
             </div>
           </div>
 
-          <div class="form-group">
+          <div class="form-group" id="speedGroup">
             <label for="speed">タイピング速度</label>
             <div class="range-wrapper">
               <input type="range" id="speed" value="3" min="1" max="10" />
@@ -292,7 +292,7 @@
             </div>
           </div>
 
-          <div class="row">
+          <div class="row" id="colorRow">
             <div class="form-group">
               <label for="color">テキスト色</label>
               <div class="color-input-wrapper">
@@ -309,7 +309,7 @@
             </div>
           </div>
 
-          <div class="form-group">
+          <div class="form-group" id="fontGroup">
             <label for="font">フォント</label>
             <select id="font">
               <option value="Press Start 2P" selected>Press Start 2P (ピクセル風)</option>
@@ -379,21 +379,27 @@
       const markdownCode = document.getElementById('markdownCode');
 
       // Mode change handler
+      const speedGroup = document.getElementById('speedGroup');
+      const colorRow = document.getElementById('colorRow');
+      const fontGroup = document.getElementById('fontGroup');
+
       modeSelect.addEventListener('change', () => {
         const isMarioMode = modeSelect.value === 'mario';
 
         if (isMarioMode) {
           skillsGroup.style.display = 'block';
           textGroup.style.display = 'none';
+          speedGroup.style.display = 'none';
+          colorRow.style.display = 'none';
+          fontGroup.style.display = 'none';
           widthInput.value = 800;
           heightInput.value = 250;
-          bgInput.value = '5C94FC';
-          bgPicker.value = '#5C94FC';
-          colorInput.value = 'FFFF00';
-          colorPicker.value = '#FFFF00';
         } else {
           skillsGroup.style.display = 'none';
           textGroup.style.display = 'block';
+          speedGroup.style.display = 'block';
+          colorRow.style.display = 'grid';
+          fontGroup.style.display = 'block';
           textInput.value = 'HELLO WORLD';
           textHint.textContent = 'カンマで区切ると複数行になります（例: Hello,World）';
           widthInput.value = 600;
