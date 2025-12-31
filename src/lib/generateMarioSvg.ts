@@ -257,14 +257,32 @@ function createTechIcon(
   y: number,
   delay: number,
   opts: MarioSvgOptions,
-  index: number = 0
+  index: number = 0,
+  octocatX: number = 100
 ): string {
   const colors = getTechColor(tech);
   const iconSize = 50;
   const pixelSize = 4;
   const flyDir = getFlyDirection(index);
-  // ヒット時間を計算（アイコンがOctocatの位置に到達する時間）
-  const hitTime = delay + 2.5;
+
+  // 位置ベースの衝突判定
+  // Octocatのサイズ計算（スケール2.2、ピクセルサイズ3、10x10ドット）
+  const octocatScale = 2.2;
+  const octocatPixelSize = 3;
+  const octocatWidth = 10 * octocatPixelSize * octocatScale; // 約66ピクセル
+
+  // 衝突判定位置（Octocatの中心とアイコンの中心が重なる位置）
+  const collisionX = octocatX + octocatWidth / 2 + iconSize / 2;
+
+  // アイコンの移動パラメータ
+  const totalMoveDistance = opts.width + 100; // animateMotionのパスと同じ
+  const animationDuration = 5; // 秒
+
+  // アイコンの開始位置からの衝突までの移動距離
+  const moveToCollision = x - collisionX;
+
+  // ヒット時間を計算（アイコンが衝突位置に到達する時間）
+  const hitTime = delay + (moveToCollision / totalMoveDistance) * animationDuration;
 
   // ファミコン風のピクセルアートバッジ
   const badge = `
@@ -418,7 +436,7 @@ function generateRunningMario(opts: MarioSvgOptions): string {
       const iconY = octocatY - 10;
       const delay = 2 + i * 1.2; // 順番に出現
 
-      return createTechIcon(tech, startX, iconY, delay, opts, i);
+      return createTechIcon(tech, startX, iconY, delay, opts, i, octocatX);
     })
     .join('');
 
@@ -437,19 +455,31 @@ function generateRunningMario(opts: MarioSvgOptions): string {
       SCORE: ${skills.length * 100}
     </text>`;
 
-  // コインエフェクト（倒した時に出現）
+  // コインエフェクト（倒した時に出現）- 位置ベースの衝突判定
+  // Octocatのサイズ計算（スケール2.2、ピクセルサイズ3、10x10ドット）
+  const octocatScale = 2.2;
+  const octocatPixelSize = 3;
+  const octocatWidth = 10 * octocatPixelSize * octocatScale; // 約66ピクセル
+  const iconSize = 50;
+  const collisionX = octocatX + octocatWidth / 2 + iconSize / 2;
+  const totalMoveDistance = opts.width + 100;
+  const animationDuration = 5;
+
   const coinEffects = skills
     .map((tech, i) => {
-      const delay = 2 + i * 1.2 + 2.5; // アイコンが倒される時間
+      const startX = opts.width + 100 + i * 150;
+      const delay = 2 + i * 1.2;
+      const moveToCollision = startX - collisionX;
+      const hitTime = delay + (moveToCollision / totalMoveDistance) * animationDuration;
       return `
       <g>
-        ${createCoin(octocatX + 70, octocatY - 20, delay)}
+        ${createCoin(octocatX + 70, octocatY - 20, hitTime)}
         <animateTransform
           attributeName="transform"
           type="translate"
           values="0,0; 0,-50"
           dur="0.8s"
-          begin="${delay}s"
+          begin="${hitTime}s"
           fill="freeze"
         />
       </g>`;
