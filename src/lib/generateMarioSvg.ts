@@ -180,71 +180,89 @@ function createQuestionBlock(x: number, y: number, delay: number = 0): string {
 }
 
 /**
- * 技術名をskillicons.dev IDにマッピング
+ * 技術名に対応するカラーを取得
  */
-function mapTechToSkillIconId(tech: string): string {
-  const mapping: Record<string, string> = {
-    'React': 'react',
-    'Vue': 'vue',
-    'Angular': 'angular',
-    'Java': 'java',
-    'Python': 'python',
-    'Node': 'nodejs',
-    'TypeScript': 'ts',
-    'JavaScript': 'js',
-    'Go': 'go',
-    'Rust': 'rust',
-    'PHP': 'php',
-    'Ruby': 'ruby',
-    'C++': 'cpp',
-    'C': 'c',
-    'C#': 'cs',
-    'Docker': 'docker',
-    'Kubernetes': 'kubernetes',
-    'AWS': 'aws',
-    'Git': 'git',
-    'GitHub': 'github',
-    'GitLab': 'gitlab',
-    'HTML': 'html',
-    'CSS': 'css',
-    'MongoDB': 'mongodb',
-    'MySQL': 'mysql',
-    'PostgreSQL': 'postgresql',
-    'Redis': 'redis',
-    'Figma': 'figma',
-    'Linux': 'linux',
-    'VSCode': 'vscode',
-    'Django': 'django',
-    'Flask': 'flask',
-    'Laravel': 'laravel',
-    'Express': 'express',
-    'Kotlin': 'kotlin',
-    'Swift': 'swift',
-    'Flutter': 'flutter',
+function getTechColor(tech: string): { bg: string; text: string } {
+  const colors: Record<string, { bg: string; text: string }> = {
+    'React': { bg: '#61DAFB', text: '#000000' },
+    'Vue': { bg: '#4FC08D', text: '#000000' },
+    'Angular': { bg: '#DD0031', text: '#FFFFFF' },
+    'Java': { bg: '#007396', text: '#FFFFFF' },
+    'Python': { bg: '#3776AB', text: '#FFD43B' },
+    'Node': { bg: '#339933', text: '#FFFFFF' },
+    'TypeScript': { bg: '#3178C6', text: '#FFFFFF' },
+    'JavaScript': { bg: '#F7DF1E', text: '#000000' },
+    'Go': { bg: '#00ADD8', text: '#FFFFFF' },
+    'Rust': { bg: '#000000', text: '#F74C00' },
+    'PHP': { bg: '#777BB4', text: '#FFFFFF' },
+    'Ruby': { bg: '#CC342D', text: '#FFFFFF' },
+    'C++': { bg: '#00599C', text: '#FFFFFF' },
+    'C': { bg: '#A8B9CC', text: '#000000' },
+    'C#': { bg: '#239120', text: '#FFFFFF' },
+    'Docker': { bg: '#2496ED', text: '#FFFFFF' },
+    'Kubernetes': { bg: '#326CE5', text: '#FFFFFF' },
+    'AWS': { bg: '#FF9900', text: '#000000' },
+    'Git': { bg: '#F05032', text: '#FFFFFF' },
+    'GitHub': { bg: '#181717', text: '#FFFFFF' },
+    'GitLab': { bg: '#FC6D26', text: '#FFFFFF' },
+    'HTML': { bg: '#E34F26', text: '#FFFFFF' },
+    'CSS': { bg: '#1572B6', text: '#FFFFFF' },
+    'MongoDB': { bg: '#47A248', text: '#FFFFFF' },
+    'MySQL': { bg: '#4479A1', text: '#FFFFFF' },
+    'PostgreSQL': { bg: '#336791', text: '#FFFFFF' },
+    'Redis': { bg: '#DC382D', text: '#FFFFFF' },
+    'Figma': { bg: '#F24E1E', text: '#FFFFFF' },
+    'Linux': { bg: '#FCC624', text: '#000000' },
+    'VSCode': { bg: '#007ACC', text: '#FFFFFF' },
+    'Django': { bg: '#092E20', text: '#FFFFFF' },
+    'Flask': { bg: '#000000', text: '#FFFFFF' },
+    'Laravel': { bg: '#FF2D20', text: '#FFFFFF' },
+    'Express': { bg: '#000000', text: '#FFFFFF' },
+    'Kotlin': { bg: '#7F52FF', text: '#FFFFFF' },
+    'Swift': { bg: '#F05138', text: '#FFFFFF' },
+    'Flutter': { bg: '#02569B', text: '#FFFFFF' },
   };
 
-  return mapping[tech] || tech.toLowerCase();
+  return colors[tech] || { bg: '#6e7781', text: '#FFFFFF' };
 }
 
 /**
- * 技術スタックアイコンを作成（skillicons.dev使用）
+ * 技術スタックアイコンを作成（ファミコン風ピクセルアートバッジ）
  */
 function createTechIcon(tech: string, x: number, y: number, delay: number, opts: MarioSvgOptions): string {
-  const iconId = mapTechToSkillIconId(tech);
-  const iconUrl = `https://skillicons.dev/icons?i=${iconId}&theme=dark&perline=1`;
+  const colors = getTechColor(tech);
   const iconSize = 50;
+  const pixelSize = 4;
+
+  // ファミコン風のピクセルアートバッジ
+  const badge = `
+    <!-- バッジ背景（ピクセル風の角丸） -->
+    <rect x="${x + pixelSize}" y="${y}" width="${iconSize - pixelSize * 2}" height="${pixelSize}" fill="${colors.bg}"/>
+    <rect x="${x}" y="${y + pixelSize}" width="${iconSize}" height="${iconSize - pixelSize * 2}" fill="${colors.bg}"/>
+    <rect x="${x + pixelSize}" y="${y + iconSize - pixelSize}" width="${iconSize - pixelSize * 2}" height="${pixelSize}" fill="${colors.bg}"/>
+
+    <!-- ピクセル風の枠線 -->
+    <rect x="${x + pixelSize}" y="${y}" width="${iconSize - pixelSize * 2}" height="${pixelSize}" fill="none" stroke="#000" stroke-width="1"/>
+    <rect x="${x}" y="${y + pixelSize}" width="${pixelSize}" height="${iconSize - pixelSize * 2}" fill="#000"/>
+    <rect x="${x + iconSize - pixelSize}" y="${y + pixelSize}" width="${pixelSize}" height="${iconSize - pixelSize * 2}" fill="#000"/>
+    <rect x="${x + pixelSize}" y="${y + iconSize - pixelSize}" width="${iconSize - pixelSize * 2}" height="${pixelSize}" fill="none" stroke="#000" stroke-width="1"/>
+
+    <!-- 技術名の頭文字 -->
+    <text
+      x="${x + iconSize / 2}"
+      y="${y + iconSize / 2 + 8}"
+      font-size="20"
+      font-weight="bold"
+      fill="${colors.text}"
+      text-anchor="middle"
+      font-family="'Press Start 2P', monospace"
+    >${escapeXml(tech.charAt(0).toUpperCase())}</text>
+  `;
 
   return `
     <g id="tech-${tech}-${delay}">
-      <!-- skillicons.devのアイコン画像 -->
-      <image
-        x="${x}"
-        y="${y}"
-        width="${iconSize}"
-        height="${iconSize}"
-        href="${iconUrl}"
-        preserveAspectRatio="xMidYMid meet"
-      >
+      <g>
+        ${badge}
         <animate
           attributeName="opacity"
           values="1;1;0"
@@ -253,10 +271,10 @@ function createTechIcon(tech: string, x: number, y: number, delay: number, opts:
           begin="mario-hit-${tech}.begin"
           fill="freeze"
         />
-      </image>
+      </g>
 
       <!-- 技術名 -->
-      <text x="${x + 25}" y="${y + 68}" font-size="10" fill="#FFF" text-anchor="middle" font-family="'Press Start 2P', monospace" stroke="#000" stroke-width="1" paint-order="stroke">
+      <text x="${x + iconSize / 2}" y="${y + iconSize + 18}" font-size="10" fill="#FFF" text-anchor="middle" font-family="'Press Start 2P', monospace" stroke="#000" stroke-width="1" paint-order="stroke">
         ${escapeXml(tech)}
         <animate
           attributeName="opacity"
@@ -281,8 +299,8 @@ function createTechIcon(tech: string, x: number, y: number, delay: number, opts:
         id="mario-hit-${tech}"
         attributeName="transform"
         type="rotate"
-        from="0 ${x + 25} ${y + 25}"
-        to="360 ${x + 25} ${y + 25}"
+        from="0 ${x + iconSize / 2} ${y + iconSize / 2}"
+        to="360 ${x + iconSize / 2} ${y + iconSize / 2}"
         dur="0.3s"
         begin="indefinite"
         fill="freeze"
