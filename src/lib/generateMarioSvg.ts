@@ -274,8 +274,8 @@ function createTechIcon(
   // 衝突判定位置（Octocatの中心とアイコンの中心が重なる位置）
   const collisionX = octocatX + octocatWidth / 2 + iconSize / 2;
 
-  // アイコンの移動パラメータ
-  const totalMoveDistance = opts.width + 100; // animateMotionのパスと同じ
+  // アイコンの移動パラメータ（各アイコンの開始位置から画面外まで移動）
+  const totalMoveDistance = x + 100; // 開始位置から画面左端を超えるまで移動
   const animationDuration = 5; // 秒
 
   // アイコンの開始位置からの衝突までの移動距離
@@ -338,7 +338,7 @@ function createTechIcon(
 
       <!-- 右から左への移動アニメーション -->
       <animateMotion
-        path="M 0,0 L -${opts.width + 100},0"
+        path="M 0,0 L -${totalMoveDistance},0"
         dur="5s"
         begin="${delay}s"
         fill="freeze"
@@ -462,13 +462,14 @@ function generateRunningMario(opts: MarioSvgOptions): string {
   const octocatWidth = 10 * octocatPixelSize * octocatScale; // 約66ピクセル
   const iconSize = 50;
   const collisionX = octocatX + octocatWidth / 2 + iconSize / 2;
-  const totalMoveDistance = opts.width + 100;
   const animationDuration = 5;
 
   const coinEffects = skills
     .map((tech, i) => {
       const startX = opts.width + 100 + i * 150;
       const delay = 2 + i * 1.2;
+      // 各アイコンの移動距離（開始位置から画面外まで）
+      const totalMoveDistance = startX + 100;
       const moveToCollision = startX - collisionX;
       const hitTime = delay + (moveToCollision / totalMoveDistance) * animationDuration;
       return `
