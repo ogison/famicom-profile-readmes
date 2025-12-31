@@ -65,49 +65,54 @@ function escapeXml(str: string): string {
 /**
  * Octocatキャラクターをドット絵で描画（3つのバリエーション）
  */
-function createOctocatCharacter(x: number, y: number, scale: number = 1, variant: number = 0): string {
+function createOctocatCharacter(
+  x: number,
+  y: number,
+  scale: number = 1,
+  variant: number = 0
+): string {
   const s = scale * 3; // ピクセルサイズ
 
   // Octocatのドット絵パターン（10x10ピクセル、3種類のバリエーション）
   const octocatVariants = [
     // バリエーション1: 正面向き基本形
     [
-      [0,0,0,1,0,0,1,0,0,0], // 猫耳
-      [0,0,1,1,0,0,1,1,0,0],
-      [0,1,2,2,2,2,2,2,1,0], // 頭
-      [1,2,2,3,2,2,3,2,2,1],
-      [1,2,2,2,2,2,2,2,2,1], // 顔
-      [1,2,2,4,4,4,4,2,2,1],
-      [0,1,2,2,2,2,2,2,1,0], // 体
-      [0,0,1,1,1,1,1,1,0,0],
-      [0,1,0,1,0,0,1,0,1,0], // タコの足
-      [1,0,0,0,0,0,0,0,0,1],
+      [0, 0, 0, 1, 0, 0, 1, 0, 0, 0], // 猫耳
+      [0, 0, 1, 1, 0, 0, 1, 1, 0, 0],
+      [0, 1, 2, 2, 2, 2, 2, 2, 1, 0], // 頭
+      [1, 2, 2, 3, 2, 2, 3, 2, 2, 1],
+      [1, 2, 2, 2, 2, 2, 2, 2, 2, 1], // 顔
+      [1, 2, 2, 4, 4, 4, 4, 2, 2, 1],
+      [0, 1, 2, 2, 2, 2, 2, 2, 1, 0], // 体
+      [0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
+      [0, 1, 0, 1, 0, 0, 1, 0, 1, 0], // タコの足
+      [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     ],
     // バリエーション2: 走っている形（足が動いている）
     [
-      [0,0,0,1,0,0,1,0,0,0], // 猫耳
-      [0,0,1,1,0,0,1,1,0,0],
-      [0,1,2,2,2,2,2,2,1,0], // 頭
-      [1,2,2,3,2,2,3,2,2,1],
-      [1,2,2,2,2,2,2,2,2,1], // 顔
-      [1,2,2,4,4,4,4,2,2,1],
-      [0,1,2,2,2,2,2,2,1,0], // 体
-      [0,0,1,1,1,1,1,1,0,0],
-      [0,0,1,0,1,1,0,1,0,0], // タコの足（動き1）
-      [0,1,0,0,0,0,0,0,1,0],
+      [0, 0, 0, 1, 0, 0, 1, 0, 0, 0], // 猫耳
+      [0, 0, 1, 1, 0, 0, 1, 1, 0, 0],
+      [0, 1, 2, 2, 2, 2, 2, 2, 1, 0], // 頭
+      [1, 2, 2, 3, 2, 2, 3, 2, 2, 1],
+      [1, 2, 2, 2, 2, 2, 2, 2, 2, 1], // 顔
+      [1, 2, 2, 4, 4, 4, 4, 2, 2, 1],
+      [0, 1, 2, 2, 2, 2, 2, 2, 1, 0], // 体
+      [0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
+      [0, 0, 1, 0, 1, 1, 0, 1, 0, 0], // タコの足（動き1）
+      [0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
     ],
     // バリエーション3: ジャンプしている形
     [
-      [0,0,0,1,0,0,1,0,0,0], // 猫耳
-      [0,0,1,1,0,0,1,1,0,0],
-      [0,1,2,2,2,2,2,2,1,0], // 頭
-      [1,2,2,3,2,2,3,2,2,1],
-      [1,2,2,2,2,2,2,2,2,1], // 顔
-      [1,2,2,4,4,4,4,2,2,1],
-      [0,1,2,2,2,2,2,2,1,0], // 体
-      [0,0,1,1,1,1,1,1,0,0],
-      [1,0,0,1,0,0,1,0,0,1], // タコの足（広がっている）
-      [0,1,0,0,0,0,0,0,1,0],
+      [0, 0, 0, 1, 0, 0, 1, 0, 0, 0], // 猫耳
+      [0, 0, 1, 1, 0, 0, 1, 1, 0, 0],
+      [0, 1, 2, 2, 2, 2, 2, 2, 1, 0], // 頭
+      [1, 2, 2, 3, 2, 2, 3, 2, 2, 1],
+      [1, 2, 2, 2, 2, 2, 2, 2, 2, 1], // 顔
+      [1, 2, 2, 4, 4, 4, 4, 2, 2, 1],
+      [0, 1, 2, 2, 2, 2, 2, 2, 1, 0], // 体
+      [0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
+      [1, 0, 0, 1, 0, 0, 1, 0, 0, 1], // タコの足（広がっている）
+      [0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
     ],
   ];
 
@@ -184,43 +189,43 @@ function createQuestionBlock(x: number, y: number, delay: number = 0): string {
  */
 function getTechColor(tech: string): { bg: string; text: string } {
   const colors: Record<string, { bg: string; text: string }> = {
-    'React': { bg: '#61DAFB', text: '#000000' },
-    'Vue': { bg: '#4FC08D', text: '#000000' },
-    'Angular': { bg: '#DD0031', text: '#FFFFFF' },
-    'Java': { bg: '#007396', text: '#FFFFFF' },
-    'Python': { bg: '#3776AB', text: '#FFD43B' },
-    'Node': { bg: '#339933', text: '#FFFFFF' },
-    'TypeScript': { bg: '#3178C6', text: '#FFFFFF' },
-    'JavaScript': { bg: '#F7DF1E', text: '#000000' },
-    'Go': { bg: '#00ADD8', text: '#FFFFFF' },
-    'Rust': { bg: '#000000', text: '#F74C00' },
-    'PHP': { bg: '#777BB4', text: '#FFFFFF' },
-    'Ruby': { bg: '#CC342D', text: '#FFFFFF' },
+    React: { bg: '#61DAFB', text: '#000000' },
+    Vue: { bg: '#4FC08D', text: '#000000' },
+    Angular: { bg: '#DD0031', text: '#FFFFFF' },
+    Java: { bg: '#007396', text: '#FFFFFF' },
+    Python: { bg: '#3776AB', text: '#FFD43B' },
+    Node: { bg: '#339933', text: '#FFFFFF' },
+    TypeScript: { bg: '#3178C6', text: '#FFFFFF' },
+    JavaScript: { bg: '#F7DF1E', text: '#000000' },
+    Go: { bg: '#00ADD8', text: '#FFFFFF' },
+    Rust: { bg: '#000000', text: '#F74C00' },
+    PHP: { bg: '#777BB4', text: '#FFFFFF' },
+    Ruby: { bg: '#CC342D', text: '#FFFFFF' },
     'C++': { bg: '#00599C', text: '#FFFFFF' },
-    'C': { bg: '#A8B9CC', text: '#000000' },
+    C: { bg: '#A8B9CC', text: '#000000' },
     'C#': { bg: '#239120', text: '#FFFFFF' },
-    'Docker': { bg: '#2496ED', text: '#FFFFFF' },
-    'Kubernetes': { bg: '#326CE5', text: '#FFFFFF' },
-    'AWS': { bg: '#FF9900', text: '#000000' },
-    'Git': { bg: '#F05032', text: '#FFFFFF' },
-    'GitHub': { bg: '#181717', text: '#FFFFFF' },
-    'GitLab': { bg: '#FC6D26', text: '#FFFFFF' },
-    'HTML': { bg: '#E34F26', text: '#FFFFFF' },
-    'CSS': { bg: '#1572B6', text: '#FFFFFF' },
-    'MongoDB': { bg: '#47A248', text: '#FFFFFF' },
-    'MySQL': { bg: '#4479A1', text: '#FFFFFF' },
-    'PostgreSQL': { bg: '#336791', text: '#FFFFFF' },
-    'Redis': { bg: '#DC382D', text: '#FFFFFF' },
-    'Figma': { bg: '#F24E1E', text: '#FFFFFF' },
-    'Linux': { bg: '#FCC624', text: '#000000' },
-    'VSCode': { bg: '#007ACC', text: '#FFFFFF' },
-    'Django': { bg: '#092E20', text: '#FFFFFF' },
-    'Flask': { bg: '#000000', text: '#FFFFFF' },
-    'Laravel': { bg: '#FF2D20', text: '#FFFFFF' },
-    'Express': { bg: '#000000', text: '#FFFFFF' },
-    'Kotlin': { bg: '#7F52FF', text: '#FFFFFF' },
-    'Swift': { bg: '#F05138', text: '#FFFFFF' },
-    'Flutter': { bg: '#02569B', text: '#FFFFFF' },
+    Docker: { bg: '#2496ED', text: '#FFFFFF' },
+    Kubernetes: { bg: '#326CE5', text: '#FFFFFF' },
+    AWS: { bg: '#FF9900', text: '#000000' },
+    Git: { bg: '#F05032', text: '#FFFFFF' },
+    GitHub: { bg: '#181717', text: '#FFFFFF' },
+    GitLab: { bg: '#FC6D26', text: '#FFFFFF' },
+    HTML: { bg: '#E34F26', text: '#FFFFFF' },
+    CSS: { bg: '#1572B6', text: '#FFFFFF' },
+    MongoDB: { bg: '#47A248', text: '#FFFFFF' },
+    MySQL: { bg: '#4479A1', text: '#FFFFFF' },
+    PostgreSQL: { bg: '#336791', text: '#FFFFFF' },
+    Redis: { bg: '#DC382D', text: '#FFFFFF' },
+    Figma: { bg: '#F24E1E', text: '#FFFFFF' },
+    Linux: { bg: '#FCC624', text: '#000000' },
+    VSCode: { bg: '#007ACC', text: '#FFFFFF' },
+    Django: { bg: '#092E20', text: '#FFFFFF' },
+    Flask: { bg: '#000000', text: '#FFFFFF' },
+    Laravel: { bg: '#FF2D20', text: '#FFFFFF' },
+    Express: { bg: '#000000', text: '#FFFFFF' },
+    Kotlin: { bg: '#7F52FF', text: '#FFFFFF' },
+    Swift: { bg: '#F05138', text: '#FFFFFF' },
+    Flutter: { bg: '#02569B', text: '#FFFFFF' },
   };
 
   return colors[tech] || { bg: '#6e7781', text: '#FFFFFF' };
@@ -229,7 +234,13 @@ function getTechColor(tech: string): { bg: string; text: string } {
 /**
  * 技術スタックアイコンを作成（ファミコン風ピクセルアートバッジ）
  */
-function createTechIcon(tech: string, x: number, y: number, delay: number, opts: MarioSvgOptions): string {
+function createTechIcon(
+  tech: string,
+  x: number,
+  y: number,
+  delay: number,
+  opts: MarioSvgOptions
+): string {
   const colors = getTechColor(tech);
   const iconSize = 50;
   const pixelSize = 4;
@@ -322,7 +333,10 @@ function createTechIcon(tech: string, x: number, y: number, delay: number, opts:
  */
 function generateRunningMario(opts: MarioSvgOptions): string {
   // 技術スタックを解析
-  const skills = opts.skills.split(',').map(s => s.trim()).filter(s => s.length > 0);
+  const skills = opts.skills
+    .split(',')
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0);
 
   // Octocatの位置
   const octocatY = opts.height - 130;
@@ -376,14 +390,15 @@ function generateRunningMario(opts: MarioSvgOptions): string {
     </g>`;
 
   // 技術アイコンを生成（右から流れてくる）
-  const techIcons = skills.map((tech, i) => {
-    const startX = opts.width + 100 + (i * 150);
-    const iconY = octocatY - 10;
-    const delay = 2 + (i * 1.2); // 順番に出現
+  const techIcons = skills
+    .map((tech, i) => {
+      const startX = opts.width + 100 + i * 150;
+      const iconY = octocatY - 10;
+      const delay = 2 + i * 1.2; // 順番に出現
 
-    return createTechIcon(tech, startX, iconY, delay, opts);
-  }).join('');
-
+      return createTechIcon(tech, startX, iconY, delay, opts);
+    })
+    .join('');
 
   // スコア表示（倒した技術の数）
   const scoreText = `
@@ -401,9 +416,10 @@ function generateRunningMario(opts: MarioSvgOptions): string {
     </text>`;
 
   // コインエフェクト（倒した時に出現）
-  const coinEffects = skills.map((tech, i) => {
-    const delay = 2 + (i * 1.2) + 2.5; // アイコンが倒される時間
-    return `
+  const coinEffects = skills
+    .map((tech, i) => {
+      const delay = 2 + i * 1.2 + 2.5; // アイコンが倒される時間
+      return `
       <g>
         ${createCoin(octocatX + 70, octocatY - 20, delay)}
         <animateTransform
@@ -415,16 +431,19 @@ function generateRunningMario(opts: MarioSvgOptions): string {
           fill="freeze"
         />
       </g>`;
-  }).join('');
+    })
+    .join('');
 
   // 各技術アイコンのヒット判定トリガー
-  const hitTriggers = skills.map((tech, i) => {
-    const hitTime = 2 + (i * 1.2) + 2.5;
-    return `
+  const hitTriggers = skills
+    .map((tech, i) => {
+      const hitTime = 2 + i * 1.2 + 2.5;
+      return `
       <set attributeName="display" to="none" begin="${hitTime}s" />
       <animate attributeName="opacity" from="1" to="1" dur="0.01s" begin="${hitTime}s"
-               onbegin="document.getElementById('tech-${tech}-${2 + (i * 1.2)}').getElementsByTagName('animateTransform')[3].beginElement();" />`;
-  }).join('');
+               onbegin="document.getElementById('tech-${tech}-${2 + i * 1.2}').getElementsByTagName('animateTransform')[3].beginElement();" />`;
+    })
+    .join('');
 
   return `${octocat}${techIcons}${scoreText}${coinEffects}`;
 }

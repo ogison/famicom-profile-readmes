@@ -7,7 +7,9 @@
     "dev": "vercel dev",
     "prebuild": "npx ts-node scripts/generateFontData.ts",
     "build": "tsc --noEmit",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "keywords": [
     "github",
@@ -22,6 +24,7 @@
   "devDependencies": {
     "@types/node": "^20.10.0",
     "@vercel/node": "^3.0.0",
+    "prettier": "^3.7.4",
     "typescript": "^5.3.0",
     "vercel": "^33.0.0"
   },

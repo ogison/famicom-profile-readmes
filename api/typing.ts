@@ -9,16 +9,7 @@ import { generateTypingSvg, defaultOptions } from '../src/lib/generateSvg';
  */
 export default function handler(req: VercelRequest, res: VercelResponse) {
   try {
-    const {
-      text,
-      fontSize,
-      width,
-      height,
-      color,
-      bg,
-      speed,
-      font,
-    } = req.query;
+    const { text, fontSize, width, height, color, bg, speed, font } = req.query;
 
     // パラメータを解析
     const options = {
