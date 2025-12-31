@@ -278,7 +278,7 @@
             </div>
           </div>
 
-          <div class="form-group">
+          <div class="form-group" id="fontSizeGroup">
             <label for="fontSize">フォントサイズ</label>
             <div class="range-wrapper">
               <input type="range" id="fontSize" value="32" min="8" max="72" />
@@ -384,6 +384,7 @@
       const speedGroup = document.getElementById('speedGroup');
       const colorRow = document.getElementById('colorRow');
       const fontGroup = document.getElementById('fontGroup');
+      const fontSizeGroup = document.getElementById('fontSizeGroup');
 
       modeSelect.addEventListener('change', () => {
         const isMarioMode = modeSelect.value === 'mario';
@@ -394,6 +395,7 @@
           speedGroup.style.display = 'none';
           colorRow.style.display = 'none';
           fontGroup.style.display = 'none';
+          fontSizeGroup.style.display = 'none';
           widthInput.value = 800;
           heightInput.value = 250;
         } else {
@@ -402,6 +404,7 @@
           speedGroup.style.display = 'block';
           colorRow.style.display = 'grid';
           fontGroup.style.display = 'block';
+          fontSizeGroup.style.display = 'block';
           textInput.value = 'HELLO WORLD';
           textHint.textContent = 'カンマで区切ると複数行になります（例: Hello,World）';
           widthInput.value = 600;
