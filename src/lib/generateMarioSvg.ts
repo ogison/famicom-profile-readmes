@@ -232,6 +232,23 @@ function getTechColor(tech: string): { bg: string; text: string } {
 }
 
 /**
+ * 飛んでいく方向を計算（インデックスに基づいてバリエーション）
+ */
+function getFlyDirection(index: number): { x: number; y: number } {
+  // 様々な方向に飛ばす（上方向をメインに、斜め方向も含む）
+  const directions = [
+    { x: -100, y: -400 }, // 左上に飛ぶ
+    { x: 200, y: -350 }, // 右上に飛ぶ
+    { x: -150, y: -300 }, // 左上（浅め）
+    { x: 250, y: -450 }, // 右上（高め）
+    { x: 0, y: -500 }, // 真上に飛ぶ
+    { x: -200, y: -380 }, // 左上に飛ぶ
+    { x: 180, y: -420 }, // 右上に飛ぶ
+  ];
+  return directions[index % directions.length];
+}
+
+/**
  * 技術スタックアイコンを作成（ファミコン風ピクセルアートバッジ）
  */
 function createTechIcon(
@@ -239,11 +256,13 @@ function createTechIcon(
   x: number,
   y: number,
   delay: number,
-  opts: MarioSvgOptions
+  opts: MarioSvgOptions,
+  index: number = 0
 ): string {
   const colors = getTechColor(tech);
   const iconSize = 50;
   const pixelSize = 4;
+  const flyDir = getFlyDirection(index);
 
   // ファミコン風のピクセルアートバッジ
   const badge = `
@@ -277,8 +296,8 @@ function createTechIcon(
         <animate
           attributeName="opacity"
           values="1;1;0"
-          keyTimes="0;0.9;1"
-          dur="0.3s"
+          keyTimes="0;0.7;1"
+          dur="0.8s"
           begin="mario-hit-${tech}.begin"
           fill="freeze"
         />
@@ -290,8 +309,8 @@ function createTechIcon(
         <animate
           attributeName="opacity"
           values="1;1;0"
-          keyTimes="0;0.9;1"
-          dur="0.3s"
+          keyTimes="0;0.7;1"
+          dur="0.8s"
           begin="mario-hit-${tech}.begin"
           fill="freeze"
         />
@@ -305,23 +324,24 @@ function createTechIcon(
         fill="freeze"
       />
 
-      <!-- ヒット時の回転・縮小アニメーション -->
+      <!-- ヒット時の回転アニメーション -->
       <animateTransform
         id="mario-hit-${tech}"
         attributeName="transform"
         type="rotate"
         from="0 ${x + iconSize / 2} ${y + iconSize / 2}"
-        to="360 ${x + iconSize / 2} ${y + iconSize / 2}"
-        dur="0.3s"
+        to="${720 + (index % 3) * 180} ${x + iconSize / 2} ${y + iconSize / 2}"
+        dur="0.8s"
         begin="indefinite"
         fill="freeze"
       />
+      <!-- ヒット時の画面外に飛ぶアニメーション -->
       <animateTransform
         attributeName="transform"
-        type="scale"
+        type="translate"
         additive="sum"
-        values="1;0"
-        dur="0.3s"
+        values="0,0; ${flyDir.x},${flyDir.y}"
+        dur="0.8s"
         begin="mario-hit-${tech}.begin"
         fill="freeze"
       />
@@ -396,7 +416,7 @@ function generateRunningMario(opts: MarioSvgOptions): string {
       const iconY = octocatY - 10;
       const delay = 2 + i * 1.2; // 順番に出現
 
-      return createTechIcon(tech, startX, iconY, delay, opts);
+      return createTechIcon(tech, startX, iconY, delay, opts, i);
     })
     .join('');
 
