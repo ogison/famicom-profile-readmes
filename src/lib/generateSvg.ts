@@ -40,7 +40,10 @@ export const defaultOptions: SvgOptions = {
  * テキストをパースして行配列に変換
  */
 function parseTextLines(text: string): string[] {
-  return text.split(',').map((line) => line.trim()).filter((line) => line.length > 0);
+  return text
+    .split(',')
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0);
 }
 
 /**

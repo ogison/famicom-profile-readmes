@@ -1,510 +1,527 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Typing SVG Generator</title>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #1a1a2e;
-      color: #eee;
-      margin: 0;
-      padding: 20px;
-      min-height: 100vh;
-    }
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    h1 {
-      color: #e94560;
-      text-align: center;
-      margin-bottom: 10px;
-    }
-    .subtitle {
-      text-align: center;
-      color: #888;
-      margin-bottom: 30px;
-    }
-    .main-content {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 30px;
-    }
-    @media (max-width: 900px) {
-      .main-content {
-        grid-template-columns: 1fr;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Typing SVG Generator</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
       }
-    }
-    .panel {
-      background: #16213e;
-      border-radius: 12px;
-      padding: 24px;
-    }
-    .panel-title {
-      color: #e94560;
-      margin-top: 0;
-      margin-bottom: 20px;
-      font-size: 18px;
-      border-bottom: 1px solid #e9456033;
-      padding-bottom: 10px;
-    }
-    .form-group {
-      margin-bottom: 20px;
-    }
-    label {
-      display: block;
-      margin-bottom: 6px;
-      color: #aaa;
-      font-size: 14px;
-    }
-    input[type="text"],
-    input[type="number"],
-    select {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1px solid #0f3460;
-      border-radius: 6px;
-      background: #0f3460;
-      color: #fff;
-      font-size: 14px;
-      transition: border-color 0.2s;
-    }
-    input[type="text"]:focus,
-    input[type="number"]:focus,
-    select:focus {
-      outline: none;
-      border-color: #e94560;
-    }
-    .color-input-wrapper {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-    input[type="color"] {
-      width: 50px;
-      height: 38px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      background: transparent;
-    }
-    .color-hex {
-      flex: 1;
-    }
-    .row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
-    }
-    .range-wrapper {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-    input[type="range"] {
-      flex: 1;
-      height: 6px;
-      border-radius: 3px;
-      background: #0f3460;
-      appearance: none;
-      cursor: pointer;
-    }
-    input[type="range"]::-webkit-slider-thumb {
-      appearance: none;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: #e94560;
-      cursor: pointer;
-    }
-    .range-value {
-      min-width: 40px;
-      text-align: center;
-      color: #e94560;
-      font-weight: bold;
-    }
-    .preview-container {
-      background: #000;
-      border-radius: 8px;
-      padding: 20px;
-      min-height: 150px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: auto;
-    }
-    .preview-container img,
-    .preview-container object {
-      max-width: 100%;
-      height: auto;
-      display: block;
-    }
-    .url-section {
-      margin-top: 20px;
-    }
-    .url-wrapper {
-      display: flex;
-      gap: 10px;
-    }
-    .url-input {
-      flex: 1;
-      padding: 10px 12px;
-      border: 1px solid #0f3460;
-      border-radius: 6px;
-      background: #0f3460;
-      color: #00ff00;
-      font-family: 'Courier New', monospace;
-      font-size: 12px;
-      word-break: break-all;
-    }
-    .copy-btn {
-      padding: 10px 20px;
-      background: #e94560;
-      border: none;
-      border-radius: 6px;
-      color: #fff;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background 0.2s;
-      white-space: nowrap;
-    }
-    .copy-btn:hover {
-      background: #ff6b6b;
-    }
-    .copy-btn.copied {
-      background: #00c853;
-    }
-    .markdown-section {
-      margin-top: 15px;
-    }
-    .markdown-code {
-      padding: 10px 12px;
-      border: 1px solid #0f3460;
-      border-radius: 6px;
-      background: #0f3460;
-      color: #ffcc00;
-      font-family: 'Courier New', monospace;
-      font-size: 12px;
-      word-break: break-all;
-      width: 100%;
-    }
-    .section-label {
-      color: #888;
-      font-size: 12px;
-      margin-bottom: 6px;
-    }
-    .refresh-btn {
-      padding: 12px 24px;
-      background: #0f3460;
-      border: 2px solid #e94560;
-      border-radius: 6px;
-      color: #e94560;
-      cursor: pointer;
-      font-weight: bold;
-      transition: all 0.2s;
-      width: 100%;
-      margin-top: 10px;
-    }
-    .refresh-btn:hover {
-      background: #e94560;
-      color: #fff;
-    }
-    .hint {
-      font-size: 12px;
-      color: #666;
-      margin-top: 4px;
-    }
-    .font-preview {
-      font-family: 'Press Start 2P', cursive;
-      font-size: 10px;
-      color: #e94560;
-      margin-top: 4px;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>Typing SVG Generator</h1>
-    <p class="subtitle">GitHub README用のタイピングアニメーションSVGを生成</p>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: #1a1a2e;
+        color: #eee;
+        margin: 0;
+        padding: 20px;
+        min-height: 100vh;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      h1 {
+        color: #e94560;
+        text-align: center;
+        margin-bottom: 10px;
+      }
+      .subtitle {
+        text-align: center;
+        color: #888;
+        margin-bottom: 30px;
+      }
+      .main-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+      }
+      @media (max-width: 900px) {
+        .main-content {
+          grid-template-columns: 1fr;
+        }
+      }
+      .panel {
+        background: #16213e;
+        border-radius: 12px;
+        padding: 24px;
+      }
+      .panel-title {
+        color: #e94560;
+        margin-top: 0;
+        margin-bottom: 20px;
+        font-size: 18px;
+        border-bottom: 1px solid #e9456033;
+        padding-bottom: 10px;
+      }
+      .form-group {
+        margin-bottom: 20px;
+      }
+      label {
+        display: block;
+        margin-bottom: 6px;
+        color: #aaa;
+        font-size: 14px;
+      }
+      input[type='text'],
+      input[type='number'],
+      select {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #0f3460;
+        border-radius: 6px;
+        background: #0f3460;
+        color: #fff;
+        font-size: 14px;
+        transition: border-color 0.2s;
+      }
+      input[type='text']:focus,
+      input[type='number']:focus,
+      select:focus {
+        outline: none;
+        border-color: #e94560;
+      }
+      .color-input-wrapper {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+      input[type='color'] {
+        width: 50px;
+        height: 38px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        background: transparent;
+      }
+      .color-hex {
+        flex: 1;
+      }
+      .row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+      }
+      .range-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      input[type='range'] {
+        flex: 1;
+        height: 6px;
+        border-radius: 3px;
+        background: #0f3460;
+        appearance: none;
+        cursor: pointer;
+      }
+      input[type='range']::-webkit-slider-thumb {
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #e94560;
+        cursor: pointer;
+      }
+      .range-value {
+        min-width: 40px;
+        text-align: center;
+        color: #e94560;
+        font-weight: bold;
+      }
+      .preview-container {
+        background: #000;
+        border-radius: 8px;
+        padding: 20px;
+        min-height: 150px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: auto;
+      }
+      .preview-container img,
+      .preview-container object {
+        max-width: 100%;
+        height: auto;
+        display: block;
+      }
+      .url-section {
+        margin-top: 20px;
+      }
+      .url-wrapper {
+        display: flex;
+        gap: 10px;
+      }
+      .url-input {
+        flex: 1;
+        padding: 10px 12px;
+        border: 1px solid #0f3460;
+        border-radius: 6px;
+        background: #0f3460;
+        color: #00ff00;
+        font-family: 'Courier New', monospace;
+        font-size: 12px;
+        word-break: break-all;
+      }
+      .copy-btn {
+        padding: 10px 20px;
+        background: #e94560;
+        border: none;
+        border-radius: 6px;
+        color: #fff;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background 0.2s;
+        white-space: nowrap;
+      }
+      .copy-btn:hover {
+        background: #ff6b6b;
+      }
+      .copy-btn.copied {
+        background: #00c853;
+      }
+      .markdown-section {
+        margin-top: 15px;
+      }
+      .markdown-code {
+        padding: 10px 12px;
+        border: 1px solid #0f3460;
+        border-radius: 6px;
+        background: #0f3460;
+        color: #ffcc00;
+        font-family: 'Courier New', monospace;
+        font-size: 12px;
+        word-break: break-all;
+        width: 100%;
+      }
+      .section-label {
+        color: #888;
+        font-size: 12px;
+        margin-bottom: 6px;
+      }
+      .refresh-btn {
+        padding: 12px 24px;
+        background: #0f3460;
+        border: 2px solid #e94560;
+        border-radius: 6px;
+        color: #e94560;
+        cursor: pointer;
+        font-weight: bold;
+        transition: all 0.2s;
+        width: 100%;
+        margin-top: 10px;
+      }
+      .refresh-btn:hover {
+        background: #e94560;
+        color: #fff;
+      }
+      .hint {
+        font-size: 12px;
+        color: #666;
+        margin-top: 4px;
+      }
+      .font-preview {
+        font-family: 'Press Start 2P', cursive;
+        font-size: 10px;
+        color: #e94560;
+        margin-top: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Typing SVG Generator</h1>
+      <p class="subtitle">GitHub README用のタイピングアニメーションSVGを生成</p>
 
-    <div class="main-content">
-      <div class="panel">
-        <h2 class="panel-title">Settings</h2>
+      <div class="main-content">
+        <div class="panel">
+          <h2 class="panel-title">Settings</h2>
 
-        <div class="form-group">
-          <label for="mode">アニメーションモード</label>
-          <select id="mode">
-            <option value="typing">タイピング風</option>
-            <option value="mario">GitHub Octocat風（技術スタック）</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="text">テキスト</label>
-          <input type="text" id="text" value="HELLO WORLD" placeholder="表示するテキストを入力">
-          <p class="hint" id="textHint">カンマで区切ると複数行になります（例: Hello,World）</p>
-        </div>
-
-        <div class="form-group" id="skillsGroup" style="display:none;">
-          <label for="skills">技術スタック（Octocatモード用）</label>
-          <input type="text" id="skills" value="React,Vue,Java,Python,Node" placeholder="技術スタックをカンマ区切りで入力">
-          <p class="hint">倒す技術のアイコンを指定します</p>
-        </div>
-
-        <div class="row">
           <div class="form-group">
-            <label for="width">横幅 (px)</label>
-            <input type="number" id="width" value="600" min="100" max="1200">
+            <label for="mode">アニメーションモード</label>
+            <select id="mode">
+              <option value="typing">タイピング風</option>
+              <option value="mario">GitHub Octocat風（技術スタック）</option>
+            </select>
           </div>
+
           <div class="form-group">
-            <label for="height">高さ (px)</label>
-            <input type="number" id="height" value="80" min="30" max="500">
+            <label for="text">テキスト</label>
+            <input type="text" id="text" value="HELLO WORLD" placeholder="表示するテキストを入力" />
+            <p class="hint" id="textHint">カンマで区切ると複数行になります（例: Hello,World）</p>
           </div>
-        </div>
 
-        <div class="form-group">
-          <label for="fontSize">フォントサイズ</label>
-          <div class="range-wrapper">
-            <input type="range" id="fontSize" value="32" min="8" max="72">
-            <span class="range-value" id="fontSizeValue">32</span>
+          <div class="form-group" id="skillsGroup" style="display: none">
+            <label for="skills">技術スタック（Octocatモード用）</label>
+            <input
+              type="text"
+              id="skills"
+              value="React,Vue,Java,Python,Node"
+              placeholder="技術スタックをカンマ区切りで入力"
+            />
+            <p class="hint">倒す技術のアイコンを指定します</p>
           </div>
-        </div>
 
-        <div class="form-group">
-          <label for="speed">タイピング速度</label>
-          <div class="range-wrapper">
-            <input type="range" id="speed" value="3" min="1" max="10">
-            <span class="range-value" id="speedValue">3</span>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="form-group">
-            <label for="color">テキスト色</label>
-            <div class="color-input-wrapper">
-              <input type="color" id="colorPicker" value="#e80000">
-              <input type="text" id="color" value="E80000" class="color-hex" maxlength="6">
+          <div class="row">
+            <div class="form-group">
+              <label for="width">横幅 (px)</label>
+              <input type="number" id="width" value="600" min="100" max="1200" />
+            </div>
+            <div class="form-group">
+              <label for="height">高さ (px)</label>
+              <input type="number" id="height" value="80" min="30" max="500" />
             </div>
           </div>
+
           <div class="form-group">
-            <label for="bg">背景色</label>
-            <div class="color-input-wrapper">
-              <input type="color" id="bgPicker" value="#000000">
-              <input type="text" id="bg" value="000000" class="color-hex" maxlength="6">
+            <label for="fontSize">フォントサイズ</label>
+            <div class="range-wrapper">
+              <input type="range" id="fontSize" value="32" min="8" max="72" />
+              <span class="range-value" id="fontSizeValue">32</span>
             </div>
           </div>
-        </div>
 
-        <div class="form-group">
-          <label for="font">フォント</label>
-          <select id="font">
-            <option value="Press Start 2P" selected>Press Start 2P (ピクセル風)</option>
-            <option value="Courier New">Courier New (等幅)</option>
-            <option value="Arial">Arial</option>
-            <option value="Georgia">Georgia</option>
-            <option value="Impact">Impact</option>
-          </select>
-          <p class="font-preview" id="fontPreview">Sample Text</p>
-        </div>
-
-        <button class="refresh-btn" onclick="updatePreview()">プレビューを更新</button>
-      </div>
-
-      <div class="panel">
-        <h2 class="panel-title">Preview</h2>
-
-        <div class="preview-container" id="previewContainer">
-          <object id="preview" type="image/svg+xml" data="">
-            <img id="previewFallback" alt="SVG Preview">
-          </object>
-        </div>
-
-        <div class="url-section">
-          <p class="section-label">API URL</p>
-          <div class="url-wrapper">
-            <input type="text" id="apiUrl" class="url-input" readonly>
-            <button class="copy-btn" onclick="copyUrl()">コピー</button>
+          <div class="form-group">
+            <label for="speed">タイピング速度</label>
+            <div class="range-wrapper">
+              <input type="range" id="speed" value="3" min="1" max="10" />
+              <span class="range-value" id="speedValue">3</span>
+            </div>
           </div>
+
+          <div class="row">
+            <div class="form-group">
+              <label for="color">テキスト色</label>
+              <div class="color-input-wrapper">
+                <input type="color" id="colorPicker" value="#e80000" />
+                <input type="text" id="color" value="E80000" class="color-hex" maxlength="6" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="bg">背景色</label>
+              <div class="color-input-wrapper">
+                <input type="color" id="bgPicker" value="#000000" />
+                <input type="text" id="bg" value="000000" class="color-hex" maxlength="6" />
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="font">フォント</label>
+            <select id="font">
+              <option value="Press Start 2P" selected>Press Start 2P (ピクセル風)</option>
+              <option value="Courier New">Courier New (等幅)</option>
+              <option value="Arial">Arial</option>
+              <option value="Georgia">Georgia</option>
+              <option value="Impact">Impact</option>
+            </select>
+            <p class="font-preview" id="fontPreview">Sample Text</p>
+          </div>
+
+          <button class="refresh-btn" onclick="updatePreview()">プレビューを更新</button>
         </div>
 
-        <div class="markdown-section">
-          <p class="section-label">Markdown (README用)</p>
-          <div class="url-wrapper">
-            <input type="text" id="markdownCode" class="markdown-code" readonly>
-            <button class="copy-btn" onclick="copyMarkdown()">コピー</button>
+        <div class="panel">
+          <h2 class="panel-title">Preview</h2>
+
+          <div class="preview-container" id="previewContainer">
+            <object id="preview" type="image/svg+xml" data="">
+              <img id="previewFallback" alt="SVG Preview" />
+            </object>
+          </div>
+
+          <div class="url-section">
+            <p class="section-label">API URL</p>
+            <div class="url-wrapper">
+              <input type="text" id="apiUrl" class="url-input" readonly />
+              <button class="copy-btn" onclick="copyUrl()">コピー</button>
+            </div>
+          </div>
+
+          <div class="markdown-section">
+            <p class="section-label">Markdown (README用)</p>
+            <div class="url-wrapper">
+              <input type="text" id="markdownCode" class="markdown-code" readonly />
+              <button class="copy-btn" onclick="copyMarkdown()">コピー</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <script>
-    const baseUrl = window.location.origin;
+    <script>
+      const baseUrl = window.location.origin;
 
-    // Elements
-    const modeSelect = document.getElementById('mode');
-    const textInput = document.getElementById('text');
-    const skillsInput = document.getElementById('skills');
-    const skillsGroup = document.getElementById('skillsGroup');
-    const textHint = document.getElementById('textHint');
-    const widthInput = document.getElementById('width');
-    const heightInput = document.getElementById('height');
-    const fontSizeInput = document.getElementById('fontSize');
-    const fontSizeValue = document.getElementById('fontSizeValue');
-    const speedInput = document.getElementById('speed');
-    const speedValue = document.getElementById('speedValue');
-    const colorInput = document.getElementById('color');
-    const colorPicker = document.getElementById('colorPicker');
-    const bgInput = document.getElementById('bg');
-    const bgPicker = document.getElementById('bgPicker');
-    const fontSelect = document.getElementById('font');
-    const fontPreview = document.getElementById('fontPreview');
-    const preview = document.getElementById('preview');
-    const apiUrlInput = document.getElementById('apiUrl');
-    const markdownCode = document.getElementById('markdownCode');
+      // Elements
+      const modeSelect = document.getElementById('mode');
+      const textInput = document.getElementById('text');
+      const skillsInput = document.getElementById('skills');
+      const skillsGroup = document.getElementById('skillsGroup');
+      const textHint = document.getElementById('textHint');
+      const widthInput = document.getElementById('width');
+      const heightInput = document.getElementById('height');
+      const fontSizeInput = document.getElementById('fontSize');
+      const fontSizeValue = document.getElementById('fontSizeValue');
+      const speedInput = document.getElementById('speed');
+      const speedValue = document.getElementById('speedValue');
+      const colorInput = document.getElementById('color');
+      const colorPicker = document.getElementById('colorPicker');
+      const bgInput = document.getElementById('bg');
+      const bgPicker = document.getElementById('bgPicker');
+      const fontSelect = document.getElementById('font');
+      const fontPreview = document.getElementById('fontPreview');
+      const preview = document.getElementById('preview');
+      const apiUrlInput = document.getElementById('apiUrl');
+      const markdownCode = document.getElementById('markdownCode');
 
-    // Mode change handler
-    modeSelect.addEventListener('change', () => {
-      const isMarioMode = modeSelect.value === 'mario';
+      // Mode change handler
+      modeSelect.addEventListener('change', () => {
+        const isMarioMode = modeSelect.value === 'mario';
 
-      if (isMarioMode) {
-        skillsGroup.style.display = 'block';
-        textInput.value = 'FULL STACK DEVELOPER';
-        textHint.textContent = 'プロフィールのタイトルを入力してください';
-        widthInput.value = 800;
-        heightInput.value = 250;
-        bgInput.value = '5C94FC';
-        bgPicker.value = '#5C94FC';
-        colorInput.value = 'FFFF00';
-        colorPicker.value = '#FFFF00';
-      } else {
-        skillsGroup.style.display = 'none';
-        textInput.value = 'HELLO WORLD';
-        textHint.textContent = 'カンマで区切ると複数行になります（例: Hello,World）';
-        widthInput.value = 600;
-        heightInput.value = 80;
-        bgInput.value = '000000';
-        bgPicker.value = '#000000';
-        colorInput.value = 'E80000';
-        colorPicker.value = '#E80000';
-      }
+        if (isMarioMode) {
+          skillsGroup.style.display = 'block';
+          textInput.value = 'FULL STACK DEVELOPER';
+          textHint.textContent = 'プロフィールのタイトルを入力してください';
+          widthInput.value = 800;
+          heightInput.value = 250;
+          bgInput.value = '5C94FC';
+          bgPicker.value = '#5C94FC';
+          colorInput.value = 'FFFF00';
+          colorPicker.value = '#FFFF00';
+        } else {
+          skillsGroup.style.display = 'none';
+          textInput.value = 'HELLO WORLD';
+          textHint.textContent = 'カンマで区切ると複数行になります（例: Hello,World）';
+          widthInput.value = 600;
+          heightInput.value = 80;
+          bgInput.value = '000000';
+          bgPicker.value = '#000000';
+          colorInput.value = 'E80000';
+          colorPicker.value = '#E80000';
+        }
 
-      updatePreview();
-    });
-
-    // Sync color picker with hex input
-    colorPicker.addEventListener('input', (e) => {
-      colorInput.value = e.target.value.substring(1).toUpperCase();
-      updatePreview();
-    });
-
-    colorInput.addEventListener('input', (e) => {
-      const hex = e.target.value.replace(/[^0-9A-Fa-f]/g, '').substring(0, 6);
-      colorInput.value = hex.toUpperCase();
-      if (hex.length === 6) {
-        colorPicker.value = '#' + hex;
-      }
-    });
-
-    bgPicker.addEventListener('input', (e) => {
-      bgInput.value = e.target.value.substring(1).toUpperCase();
-      updatePreview();
-    });
-
-    bgInput.addEventListener('input', (e) => {
-      const hex = e.target.value.replace(/[^0-9A-Fa-f]/g, '').substring(0, 6);
-      bgInput.value = hex.toUpperCase();
-      if (hex.length === 6) {
-        bgPicker.value = '#' + hex;
-      }
-    });
-
-    // Update range value displays
-    fontSizeInput.addEventListener('input', () => {
-      fontSizeValue.textContent = fontSizeInput.value;
-    });
-
-    speedInput.addEventListener('input', () => {
-      speedValue.textContent = speedInput.value;
-    });
-
-    // Update font preview
-    fontSelect.addEventListener('change', () => {
-      fontPreview.style.fontFamily = fontSelect.value;
-      updatePreview();
-    });
-
-    // Auto update on input change
-    const inputs = [textInput, skillsInput, widthInput, heightInput, fontSizeInput, speedInput, colorInput, bgInput];
-    inputs.forEach(input => {
-      input.addEventListener('change', updatePreview);
-    });
-
-    function buildUrl() {
-      const isMarioMode = modeSelect.value === 'mario';
-      const params = new URLSearchParams();
-
-      params.set('text', textInput.value);
-      params.set('width', widthInput.value);
-      params.set('height', heightInput.value);
-      params.set('fontSize', fontSizeInput.value);
-      params.set('color', colorInput.value);
-      params.set('bg', bgInput.value);
-      params.set('font', fontSelect.value);
-
-      if (isMarioMode) {
-        params.set('skills', skillsInput.value);
-        return `${baseUrl}/api/mario?${params.toString()}`;
-      } else {
-        params.set('speed', speedInput.value);
-        return `${baseUrl}/api/typing?${params.toString()}`;
-      }
-    }
-
-    function updatePreview() {
-      const url = buildUrl();
-      preview.data = url;
-      // フォールバック用のimg要素も更新
-      const fallbackImg = document.getElementById('previewFallback');
-      if (fallbackImg) {
-        fallbackImg.src = url;
-      }
-      apiUrlInput.value = url;
-      markdownCode.value = `![Typing SVG](${url})`;
-    }
-
-    function copyUrl() {
-      navigator.clipboard.writeText(apiUrlInput.value).then(() => {
-        const btn = event.target;
-        btn.textContent = 'コピー完了!';
-        btn.classList.add('copied');
-        setTimeout(() => {
-          btn.textContent = 'コピー';
-          btn.classList.remove('copied');
-        }, 2000);
+        updatePreview();
       });
-    }
 
-    function copyMarkdown() {
-      navigator.clipboard.writeText(markdownCode.value).then(() => {
-        const btn = event.target;
-        btn.textContent = 'コピー完了!';
-        btn.classList.add('copied');
-        setTimeout(() => {
-          btn.textContent = 'コピー';
-          btn.classList.remove('copied');
-        }, 2000);
+      // Sync color picker with hex input
+      colorPicker.addEventListener('input', (e) => {
+        colorInput.value = e.target.value.substring(1).toUpperCase();
+        updatePreview();
       });
-    }
 
-    // Initial preview
-    updatePreview();
-  </script>
-</body>
+      colorInput.addEventListener('input', (e) => {
+        const hex = e.target.value.replace(/[^0-9A-Fa-f]/g, '').substring(0, 6);
+        colorInput.value = hex.toUpperCase();
+        if (hex.length === 6) {
+          colorPicker.value = '#' + hex;
+        }
+      });
+
+      bgPicker.addEventListener('input', (e) => {
+        bgInput.value = e.target.value.substring(1).toUpperCase();
+        updatePreview();
+      });
+
+      bgInput.addEventListener('input', (e) => {
+        const hex = e.target.value.replace(/[^0-9A-Fa-f]/g, '').substring(0, 6);
+        bgInput.value = hex.toUpperCase();
+        if (hex.length === 6) {
+          bgPicker.value = '#' + hex;
+        }
+      });
+
+      // Update range value displays
+      fontSizeInput.addEventListener('input', () => {
+        fontSizeValue.textContent = fontSizeInput.value;
+      });
+
+      speedInput.addEventListener('input', () => {
+        speedValue.textContent = speedInput.value;
+      });
+
+      // Update font preview
+      fontSelect.addEventListener('change', () => {
+        fontPreview.style.fontFamily = fontSelect.value;
+        updatePreview();
+      });
+
+      // Auto update on input change
+      const inputs = [
+        textInput,
+        skillsInput,
+        widthInput,
+        heightInput,
+        fontSizeInput,
+        speedInput,
+        colorInput,
+        bgInput,
+      ];
+      inputs.forEach((input) => {
+        input.addEventListener('change', updatePreview);
+      });
+
+      function buildUrl() {
+        const isMarioMode = modeSelect.value === 'mario';
+        const params = new URLSearchParams();
+
+        params.set('text', textInput.value);
+        params.set('width', widthInput.value);
+        params.set('height', heightInput.value);
+        params.set('fontSize', fontSizeInput.value);
+        params.set('color', colorInput.value);
+        params.set('bg', bgInput.value);
+        params.set('font', fontSelect.value);
+
+        if (isMarioMode) {
+          params.set('skills', skillsInput.value);
+          return `${baseUrl}/api/mario?${params.toString()}`;
+        } else {
+          params.set('speed', speedInput.value);
+          return `${baseUrl}/api/typing?${params.toString()}`;
+        }
+      }
+
+      function updatePreview() {
+        const url = buildUrl();
+        preview.data = url;
+        // フォールバック用のimg要素も更新
+        const fallbackImg = document.getElementById('previewFallback');
+        if (fallbackImg) {
+          fallbackImg.src = url;
+        }
+        apiUrlInput.value = url;
+        markdownCode.value = `![Typing SVG](${url})`;
+      }
+
+      function copyUrl() {
+        navigator.clipboard.writeText(apiUrlInput.value).then(() => {
+          const btn = event.target;
+          btn.textContent = 'コピー完了!';
+          btn.classList.add('copied');
+          setTimeout(() => {
+            btn.textContent = 'コピー';
+            btn.classList.remove('copied');
+          }, 2000);
+        });
+      }
+
+      function copyMarkdown() {
+        navigator.clipboard.writeText(markdownCode.value).then(() => {
+          const btn = event.target;
+          btn.textContent = 'コピー完了!';
+          btn.classList.add('copied');
+          setTimeout(() => {
+            btn.textContent = 'コピー';
+            btn.classList.remove('copied');
+          }, 2000);
+        });
+      }
+
+      // Initial preview
+      updatePreview();
+    </script>
+  </body>
 </html>

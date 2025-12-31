@@ -9,16 +9,7 @@ import { generateMarioSvg, defaultMarioOptions } from '../src/lib/generateMarioS
  */
 export default function handler(req: VercelRequest, res: VercelResponse) {
   try {
-    const {
-      text,
-      fontSize,
-      width,
-      height,
-      color,
-      bg,
-      skills,
-      font,
-    } = req.query;
+    const { text, fontSize, width, height, color, bg, skills, font } = req.query;
 
     // パラメータを解析
     const options = {

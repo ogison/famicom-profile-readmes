@@ -75,16 +75,16 @@ https://your-project-name.vercel.app/api/typing?text=HELLO+WORLD
 
 ## パラメータ一覧
 
-| パラメータ | 説明 | デフォルト値 | 例 |
-|-----------|------|-------------|-----|
-| `text` | 表示するテキスト（カンマ区切りで複数行） | `Hello World` | `text=HELLO+WORLD` |
-| `fontSize` | フォントサイズ（px） | `20` | `fontSize=24` |
-| `width` | SVGの幅（px） | `400` | `width=500` |
-| `height` | SVGの高さ（px） | `50` | `height=100` |
-| `color` | テキストの色（HEX、#なし） | `00FF00` | `color=E80000` |
-| `bg` | 背景色（HEX、#なし） | `000000` | `bg=1a1a1a` |
-| `speed` | アニメーション速度（1-5、5が最速） | `3` | `speed=4` |
-| `font` | フォントファミリー | `Press Start 2P` | `font=monospace` |
+| パラメータ | 説明                                     | デフォルト値     | 例                 |
+| ---------- | ---------------------------------------- | ---------------- | ------------------ |
+| `text`     | 表示するテキスト（カンマ区切りで複数行） | `Hello World`    | `text=HELLO+WORLD` |
+| `fontSize` | フォントサイズ（px）                     | `20`             | `fontSize=24`      |
+| `width`    | SVGの幅（px）                            | `400`            | `width=500`        |
+| `height`   | SVGの高さ（px）                          | `50`             | `height=100`       |
+| `color`    | テキストの色（HEX、#なし）               | `00FF00`         | `color=E80000`     |
+| `bg`       | 背景色（HEX、#なし）                     | `000000`         | `bg=1a1a1a`        |
+| `speed`    | アニメーション速度（1-5、5が最速）       | `3`              | `speed=4`          |
+| `font`     | フォントファミリー                       | `Press Start 2P` | `font=monospace`   |
 
 ### パラメータ使用例
 
