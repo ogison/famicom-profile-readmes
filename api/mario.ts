@@ -9,7 +9,7 @@ import { generateMarioSvg, defaultMarioOptions } from '../src/lib/generateMarioS
  */
 export default function handler(req: VercelRequest, res: VercelResponse) {
   try {
-    const { text, fontSize, width, height, color, bg, skills, font } = req.query;
+    const { text, fontSize, width, height, color, bg, skills, font, useSkillIcons, skillIconsTheme } = req.query;
 
     // パラメータを解析
     const options = {
@@ -21,6 +21,8 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
       bg: parseString(bg) || defaultMarioOptions.bg,
       skills: parseString(skills) || defaultMarioOptions.skills,
       font: parseString(font) || defaultMarioOptions.font,
+      useSkillIcons: parseBoolean(useSkillIcons) ?? defaultMarioOptions.useSkillIcons,
+      skillIconsTheme: (parseString(skillIconsTheme) as 'light' | 'dark') || defaultMarioOptions.skillIconsTheme,
     };
 
     // SVGを生成
@@ -58,6 +60,17 @@ function parseNumber(value: string | string[] | undefined): number | undefined {
   }
   const num = parseInt(str, 10);
   return isNaN(num) ? undefined : num;
+}
+
+/**
+ * クエリパラメータをブール値として解析
+ */
+function parseBoolean(value: string | string[] | undefined): boolean | undefined {
+  const str = parseString(value);
+  if (str === undefined) {
+    return undefined;
+  }
+  return str === 'true' || str === '1';
 }
 
 /**
