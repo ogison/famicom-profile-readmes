@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- ファミコン風ピクセルアート - コントローラーモチーフ -->
+  <rect width="32" height="32" fill="#1a1a2e"/>
+
+  <!-- コントローラー本体 -->
+  <rect x="4" y="10" width="24" height="12" fill="#e94560" rx="2"/>
+
+  <!-- 十字キー -->
+  <rect x="7" y="14" width="6" height="2" fill="#1a1a2e"/>
+  <rect x="9" y="12" width="2" height="6" fill="#1a1a2e"/>
+
+  <!-- ボタン -->
+  <circle cx="21" cy="15" r="2" fill="#1a1a2e"/>
+  <circle cx="25" cy="15" r="2" fill="#1a1a2e"/>
+
+  <!-- ハイライト -->
+  <rect x="4" y="10" width="24" height="2" fill="#ff6b6b" opacity="0.5"/>
+
+  <!-- ピクセル風ドット装飾 -->
+  <rect x="2" y="2" width="2" height="2" fill="#e94560"/>
+  <rect x="28" y="2" width="2" height="2" fill="#e94560"/>
+  <rect x="2" y="28" width="2" height="2" fill="#e94560"/>
+  <rect x="28" y="28" width="2" height="2" fill="#e94560"/>
+</svg>
