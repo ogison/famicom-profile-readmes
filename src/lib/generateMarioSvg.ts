@@ -263,6 +263,8 @@ function createTechIcon(
   const iconSize = 50;
   const pixelSize = 4;
   const flyDir = getFlyDirection(index);
+  // ヒット時間を計算（アイコンがOctocatの位置に到達する時間）
+  const hitTime = delay + 2.5;
 
   // ファミコン風のピクセルアートバッジ
   const badge = `
@@ -298,7 +300,7 @@ function createTechIcon(
           values="1;1;0"
           keyTimes="0;0.7;1"
           dur="0.8s"
-          begin="mario-hit-${tech}.begin"
+          begin="${hitTime}s"
           fill="freeze"
         />
       </g>
@@ -311,7 +313,7 @@ function createTechIcon(
           values="1;1;0"
           keyTimes="0;0.7;1"
           dur="0.8s"
-          begin="mario-hit-${tech}.begin"
+          begin="${hitTime}s"
           fill="freeze"
         />
       </text>
@@ -332,7 +334,7 @@ function createTechIcon(
         from="0 ${x + iconSize / 2} ${y + iconSize / 2}"
         to="${720 + (index % 3) * 180} ${x + iconSize / 2} ${y + iconSize / 2}"
         dur="0.8s"
-        begin="indefinite"
+        begin="${hitTime}s"
         fill="freeze"
       />
       <!-- ヒット時の画面外に飛ぶアニメーション -->
@@ -342,7 +344,7 @@ function createTechIcon(
         additive="sum"
         values="0,0; ${flyDir.x},${flyDir.y}"
         dur="0.8s"
-        begin="mario-hit-${tech}.begin"
+        begin="${hitTime}s"
         fill="freeze"
       />
     </g>`;
@@ -451,17 +453,6 @@ function generateRunningMario(opts: MarioSvgOptions): string {
           fill="freeze"
         />
       </g>`;
-    })
-    .join('');
-
-  // 各技術アイコンのヒット判定トリガー
-  const hitTriggers = skills
-    .map((tech, i) => {
-      const hitTime = 2 + i * 1.2 + 2.5;
-      return `
-      <set attributeName="display" to="none" begin="${hitTime}s" />
-      <animate attributeName="opacity" from="1" to="1" dur="0.01s" begin="${hitTime}s"
-               onbegin="document.getElementById('tech-${tech}-${2 + i * 1.2}').getElementsByTagName('animateTransform')[3].beginElement();" />`;
     })
     .join('');
 
