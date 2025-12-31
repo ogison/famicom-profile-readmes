@@ -332,9 +332,6 @@ function createTechIcon(
  * Octocatが走って技術アイコンを倒すアニメーション
  */
 function generateRunningMario(opts: MarioSvgOptions): string {
-  const color = normalizeColor(opts.color);
-  const escapedText = escapeXml(opts.text);
-
   // 技術スタックを解析
   const skills = opts.skills
     .split(',')
@@ -403,30 +400,6 @@ function generateRunningMario(opts: MarioSvgOptions): string {
     })
     .join('');
 
-  // テキスト表示（上部）
-  const textY = 40;
-  const text = `
-    <text
-      x="50%"
-      y="${textY}"
-      fill="#${color}"
-      font-family="'${opts.font}', monospace"
-      font-size="${opts.fontSize}"
-      text-anchor="middle"
-      stroke="#000000"
-      stroke-width="3"
-      paint-order="stroke"
-    >
-      ${escapedText}
-      <animate
-        attributeName="opacity"
-        from="0"
-        to="1"
-        dur="1s"
-        fill="freeze"
-      />
-    </text>`;
-
   // スコア表示（倒した技術の数）
   const scoreText = `
     <text
@@ -472,7 +445,7 @@ function generateRunningMario(opts: MarioSvgOptions): string {
     })
     .join('');
 
-  return `${octocat}${techIcons}${text}${scoreText}${coinEffects}`;
+  return `${octocat}${techIcons}${scoreText}${coinEffects}`;
 }
 
 /**
