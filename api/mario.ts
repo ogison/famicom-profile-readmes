@@ -9,14 +9,15 @@ import { generateMarioSvg, defaultMarioOptions } from '../src/lib/generateMarioS
  */
 export default function handler(req: VercelRequest, res: VercelResponse) {
   try {
-    const { text, fontSize, width, height, color, bg, skills, font, useSkillIcons, skillIconsTheme } = req.query;
+    const { text, fontSize, color, bg, skills, font, useSkillIcons, skillIconsTheme } = req.query;
 
     // パラメータを解析
+    // 注意: width/heightは常に400x250に固定（ユーザー設定不可）
     const options = {
       text: parseString(text) || defaultMarioOptions.text,
       fontSize: parseNumber(fontSize) || defaultMarioOptions.fontSize,
-      width: parseNumber(width) || defaultMarioOptions.width,
-      height: parseNumber(height) || defaultMarioOptions.height,
+      width: 400,
+      height: 250,
       color: parseString(color) || defaultMarioOptions.color,
       bg: parseString(bg) || defaultMarioOptions.bg,
       skills: parseString(skills) || defaultMarioOptions.skills,

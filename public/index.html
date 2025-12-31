@@ -284,7 +284,7 @@
             </select>
           </div>
 
-          <div class="row">
+          <div class="row" id="sizeRow">
             <div class="form-group">
               <label for="width">横幅 (px)</label>
               <input type="number" id="width" value="600" min="100" max="1200" />
@@ -406,6 +406,7 @@
       const colorRow = document.getElementById('colorRow');
       const fontGroup = document.getElementById('fontGroup');
       const fontSizeGroup = document.getElementById('fontSizeGroup');
+      const sizeRow = document.getElementById('sizeRow');
 
       modeSelect.addEventListener('change', () => {
         const isMarioMode = modeSelect.value === 'mario';
@@ -419,8 +420,7 @@
           colorRow.style.display = 'none';
           fontGroup.style.display = 'none';
           fontSizeGroup.style.display = 'none';
-          widthInput.value = 800;
-          heightInput.value = 250;
+          sizeRow.style.display = 'none';
         } else {
           skillsGroup.style.display = 'none';
           iconStyleGroup.style.display = 'none';
@@ -430,6 +430,7 @@
           colorRow.style.display = 'grid';
           fontGroup.style.display = 'block';
           fontSizeGroup.style.display = 'block';
+          sizeRow.style.display = 'grid';
           textInput.value = 'HELLO WORLD';
           textHint.textContent = 'カンマで区切ると複数行になります（例: Hello,World）';
           widthInput.value = 600;
@@ -512,14 +513,8 @@
         const isMarioMode = modeSelect.value === 'mario';
         const params = new URLSearchParams();
 
-        params.set('width', widthInput.value);
-        params.set('height', heightInput.value);
-        params.set('fontSize', fontSizeInput.value);
-        params.set('color', colorInput.value);
-        params.set('bg', bgInput.value);
-        params.set('font', fontSelect.value);
-
         if (isMarioMode) {
+          // Octocatモードではwidth/heightは常に400x250で固定（設定不可）
           params.set('skills', skillsInput.value);
           if (iconStyleSelect.value === 'skillicons') {
             params.set('useSkillIcons', 'true');
@@ -527,6 +522,12 @@
           }
           return `${baseUrl}/api/mario?${params.toString()}`;
         } else {
+          params.set('width', widthInput.value);
+          params.set('height', heightInput.value);
+          params.set('fontSize', fontSizeInput.value);
+          params.set('color', colorInput.value);
+          params.set('bg', bgInput.value);
+          params.set('font', fontSelect.value);
           params.set('text', textInput.value);
           params.set('speed', speedInput.value);
           return `${baseUrl}/api/typing?${params.toString()}`;
