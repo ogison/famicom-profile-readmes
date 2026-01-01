@@ -456,7 +456,7 @@ function createTechIcon(
           keyTimes="0;${collisionKeyTime};1"
           dur="${totalAnimDuration}s"
           begin="${delay}s"
-          repeatCount="indefinite"
+          fill="freeze"
         />
       </g>
 
@@ -469,7 +469,7 @@ function createTechIcon(
           keyTimes="0;${collisionKeyTime};1"
           dur="${totalAnimDuration}s"
           begin="${delay}s"
-          repeatCount="indefinite"
+          fill="freeze"
         />
       </text>
 
@@ -481,7 +481,7 @@ function createTechIcon(
         keyTimes="0; ${collisionKeyTime}; 1"
         dur="${totalAnimDuration}s"
         begin="${delay}s"
-        repeatCount="indefinite"
+        fill="freeze"
       />
     </g>`;
 }
