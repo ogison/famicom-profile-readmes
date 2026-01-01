@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ja">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -267,36 +267,36 @@
   <body>
     <div class="container">
       <h1>Famicom Profile</h1>
-      <p class="subtitle">GitHub README用のファミコン風アニメーションSVGを生成</p>
+      <p class="subtitle">Generate Famicom-style animated SVGs for your GitHub README</p>
 
       <div class="main-content">
         <div class="panel">
           <h2 class="panel-title">Settings</h2>
 
           <div class="form-group">
-            <label for="mode">アニメーションモード</label>
+            <label for="mode">Animation Mode</label>
             <select id="mode">
-              <option value="typing">タイピング風</option>
-              <option value="mario">GitHub Octocat風（技術スタック）</option>
+              <option value="typing">Typing Style</option>
+              <option value="mario">GitHub Octocat Style (Tech Stack)</option>
             </select>
           </div>
 
           <div class="form-group" id="textGroup">
-            <label for="text">テキスト</label>
-            <input type="text" id="text" value="HELLO WORLD" placeholder="表示するテキストを入力" />
-            <p class="hint" id="textHint">カンマで区切ると複数行になります（例: Hello,World）</p>
+            <label for="text">Text</label>
+            <input type="text" id="text" value="HELLO WORLD" placeholder="Enter text to display" />
+            <p class="hint" id="textHint">Use commas to separate lines (e.g., Hello,World)</p>
           </div>
 
           <div class="form-group" id="skillsGroup" style="display: none">
-            <label for="skills">技術スタック（Octocatモード用）</label>
+            <label for="skills">Tech Stack (for Octocat Mode)</label>
             <input
               type="text"
               id="skills"
               value="React,Vue,Java,Python,Node"
-              placeholder="技術スタックをカンマ区切りで入力"
+              placeholder="Enter tech stack separated by commas"
               readonly
             />
-            <p class="hint">倒す技術のアイコンを指定します（下のチェックボックスから選択）</p>
+            <p class="hint">Specify tech icons to knock down (select from checkboxes below)</p>
 
             <div id="skillsCheckboxContainer" style="max-height: 300px; overflow-y: auto; margin-top: 10px; border: 1px solid #0f3460; border-radius: 6px; padding: 12px; background: #0f3460;">
               <!-- Frontend -->
@@ -420,26 +420,26 @@
           </div>
 
           <div class="form-group" id="iconThemeGroup" style="display: none">
-            <label for="iconTheme">アイコンテーマ（skillicons.dev）</label>
+            <label for="iconTheme">Icon Theme (skillicons.dev)</label>
             <select id="iconTheme">
-              <option value="dark">ダーク</option>
-              <option value="light">ライト</option>
+              <option value="dark">Dark</option>
+              <option value="light">Light</option>
             </select>
           </div>
 
           <div class="row" id="sizeRow">
             <div class="form-group">
-              <label for="width">横幅 (px)</label>
+              <label for="width">Width (px)</label>
               <input type="number" id="width" value="600" min="100" max="1200" />
             </div>
             <div class="form-group">
-              <label for="height">高さ (px)</label>
+              <label for="height">Height (px)</label>
               <input type="number" id="height" value="80" min="30" max="500" />
             </div>
           </div>
 
           <div class="form-group" id="fontSizeGroup">
-            <label for="fontSize">フォントサイズ</label>
+            <label for="fontSize">Font Size</label>
             <div class="range-wrapper">
               <input type="range" id="fontSize" value="32" min="8" max="72" />
               <span class="range-value" id="fontSizeValue">32</span>
@@ -447,7 +447,7 @@
           </div>
 
           <div class="form-group" id="speedGroup">
-            <label for="speed">タイピング速度</label>
+            <label for="speed">Typing Speed</label>
             <div class="range-wrapper">
               <input type="range" id="speed" value="3" min="1" max="10" />
               <span class="range-value" id="speedValue">3</span>
@@ -456,14 +456,14 @@
 
           <div class="row" id="colorRow">
             <div class="form-group">
-              <label for="color">テキスト色</label>
+              <label for="color">Text Color</label>
               <div class="color-input-wrapper">
                 <input type="color" id="colorPicker" value="#e80000" />
                 <input type="text" id="color" value="E80000" class="color-hex" maxlength="6" />
               </div>
             </div>
             <div class="form-group">
-              <label for="bg">背景色</label>
+              <label for="bg">Background Color</label>
               <div class="color-input-wrapper">
                 <input type="color" id="bgPicker" value="#000000" />
                 <input type="text" id="bg" value="000000" class="color-hex" maxlength="6" />
@@ -472,10 +472,10 @@
           </div>
 
           <div class="form-group" id="fontGroup">
-            <label for="font">フォント</label>
+            <label for="font">Font</label>
             <select id="font">
-              <option value="Press Start 2P" selected>Press Start 2P (ピクセル風)</option>
-              <option value="Courier New">Courier New (等幅)</option>
+              <option value="Press Start 2P" selected>Press Start 2P (Pixel Style)</option>
+              <option value="Courier New">Courier New (Monospaced)</option>
               <option value="Arial">Arial</option>
               <option value="Georgia">Georgia</option>
               <option value="Impact">Impact</option>
@@ -483,7 +483,7 @@
             <p class="font-preview" id="fontPreview">Sample Text</p>
           </div>
 
-          <button class="refresh-btn" onclick="updatePreview()">プレビューを更新</button>
+          <button class="refresh-btn" onclick="updatePreview()">Update Preview</button>
         </div>
 
         <div class="panel">
@@ -499,15 +499,15 @@
             <p class="section-label">API URL</p>
             <div class="url-wrapper">
               <input type="text" id="apiUrl" class="url-input" readonly />
-              <button class="copy-btn" onclick="copyUrl()">コピー</button>
+              <button class="copy-btn" onclick="copyUrl()">Copy</button>
             </div>
           </div>
 
           <div class="markdown-section">
-            <p class="section-label">Markdown (README用)</p>
+            <p class="section-label">Markdown (for README)</p>
             <div class="url-wrapper">
               <input type="text" id="markdownCode" class="markdown-code" readonly />
-              <button class="copy-btn" onclick="copyMarkdown()">コピー</button>
+              <button class="copy-btn" onclick="copyMarkdown()">Copy</button>
             </div>
           </div>
         </div>
@@ -571,7 +571,7 @@
           fontSizeGroup.style.display = 'block';
           sizeRow.style.display = 'grid';
           textInput.value = 'HELLO WORLD';
-          textHint.textContent = 'カンマで区切ると複数行になります（例: Hello,World）';
+          textHint.textContent = 'Use commas to separate lines (e.g., Hello,World)';
           widthInput.value = 600;
           heightInput.value = 80;
           bgInput.value = '000000';
@@ -661,8 +661,8 @@
         const params = new URLSearchParams();
 
         if (isMarioMode) {
-          // Octocatモードではwidth/heightは常に400x250で固定（設定不可）
-          // アイコンスタイルは常にskillicons.devを使用
+          // In Octocat mode, width/height are always fixed at 400x250 (not configurable)
+          // Icon style always uses skillicons.dev
           params.set('skills', skillsInput.value);
           params.set('useSkillIcons', 'true');
           params.set('skillIconsTheme', iconThemeSelect.value);
@@ -695,10 +695,10 @@
       function copyUrl() {
         navigator.clipboard.writeText(apiUrlInput.value).then(() => {
           const btn = event.target;
-          btn.textContent = 'コピー完了!';
+          btn.textContent = 'Copied!';
           btn.classList.add('copied');
           setTimeout(() => {
-            btn.textContent = 'コピー';
+            btn.textContent = 'Copy';
             btn.classList.remove('copied');
           }, 2000);
         });
@@ -707,10 +707,10 @@
       function copyMarkdown() {
         navigator.clipboard.writeText(markdownCode.value).then(() => {
           const btn = event.target;
-          btn.textContent = 'コピー完了!';
+          btn.textContent = 'Copied!';
           btn.classList.add('copied');
           setTimeout(() => {
-            btn.textContent = 'コピー';
+            btn.textContent = 'Copy';
             btn.classList.remove('copied');
           }, 2000);
         });

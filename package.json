@@ -1,7 +1,7 @@
 {
   "name": "typing-svg-api",
   "version": "1.0.0",
-  "description": "GitHub README用タイピング風SVG生成API",
+  "description": "Typing-style SVG generation API for GitHub README",
   "main": "api/typing.ts",
   "scripts": {
     "dev": "vercel dev",
