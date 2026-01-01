@@ -90,13 +90,6 @@ export function generateTypingSvg(options: Partial<SvgOptions>): string {
   const cursorPositions: Array<{ x: number; y: number; time: number }> = [];
   let totalDelay = 0;
 
-  // Add initial cursor position off-screen
-  cursorPositions.push({
-    x: -100,
-    y: -100,
-    time: 0,
-  });
-
   lines.forEach((line, lineIndex) => {
     const y = startY + lineIndex * lineHeight;
     const chars = line.split('');
@@ -105,6 +98,15 @@ export function generateTypingSvg(options: Partial<SvgOptions>): string {
     const charWidth = opts.fontSize * 0.6;
     const lineWidth = chars.length * charWidth;
     const startX = (opts.width - lineWidth) / 2;
+
+    // Add cursor position at the beginning of the line
+    if (cursorPositions.length === 0 || lineIndex > 0) {
+      cursorPositions.push({
+        x: startX,
+        y: y,
+        time: totalDelay,
+      });
+    }
 
     chars.forEach((char, charIndex) => {
       const delay = totalDelay + charIndex * charDuration;
@@ -131,11 +133,11 @@ export function generateTypingSvg(options: Partial<SvgOptions>): string {
       />
     </text>`);
 
-      // Add cursor position after character is displayed
+      // Add cursor position after character is displayed (after the 0.1s animation)
       cursorPositions.push({
         x: x + charWidth,
         y: y,
-        time: delay + charDuration,
+        time: delay + 0.1,
       });
     });
 
@@ -147,6 +149,16 @@ export function generateTypingSvg(options: Partial<SvgOptions>): string {
   const cursorHeight = opts.fontSize;
   const totalDuration = totalDelay + 1;
   const cursorWidth = opts.fontSize * 0.1; // Make cursor width thin
+
+  // Add final cursor position to ensure keyTimes ends at 1
+  if (cursorPositions.length > 0) {
+    const lastPos = cursorPositions[cursorPositions.length - 1];
+    cursorPositions.push({
+      x: lastPos.x,
+      y: lastPos.y,
+      time: totalDuration,
+    });
+  }
 
   // Generate positions and times for animate values attribute
   const xValues = cursorPositions.map((pos) => pos.x).join(';');
