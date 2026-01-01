@@ -376,17 +376,15 @@ function createTechIcon(
       const svgMatch = svgContent.match(/<svg[^>]*>([\s\S]*)<\/svg>/i);
       const innerSvg = svgMatch ? svgMatch[1] : svgContent;
 
+      // Use <g> tag instead of nested <svg> to avoid GitHub sanitizer issues
+      // Scale from 256x256 (skillicons viewBox) to iconSize (50)
+      const scale = iconSize / 256;
+
       badge = `
     <!-- skillicons.dev icon embedded -->
-    <svg
-      x="${x}"
-      y="${y}"
-      width="${iconSize}"
-      height="${iconSize}"
-      viewBox="0 0 256 256"
-    >
+    <g transform="scale(${scale})">
       ${innerSvg}
-    </svg>
+    </g>
   `;
     } else {
       // Fall back to pixel art badge if SVG content is not available
@@ -453,7 +451,7 @@ function createTechIcon(
 
   return `
     <g id="tech-${tech}-${delay}">
-      <g>
+      <g transform="translate(${x}, ${y})">
         ${badge}
         <animate
           attributeName="opacity"
