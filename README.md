@@ -2,6 +2,8 @@
 
 A Vercel Serverless Functions API that generates **typing animation SVGs** displayable on GitHub README.
 
+**🎮 Live Demo**: https://famicom-profile-readmes.vercel.app/
+
 ## Overview
 
 - **GitHub README Compatible**: Uses SMIL/CSS animations (no JavaScript required)
@@ -51,18 +53,20 @@ After deployment, you can access the API at a URL like:
 https://your-project-name.vercel.app/api/typing?text=HELLO+WORLD
 ```
 
+**Live Demo**: https://famicom-profile-readmes.vercel.app/
+
 ## Usage
 
 ### Basic Usage
 
 ```markdown
-![Typing SVG](https://your-domain.vercel.app/api/typing?text=Hello+World)
+![Typing SVG](https://famicom-profile-readmes.vercel.app/api/typing?text=Hello+World)
 ```
 
 ### Customization Example
 
 ```markdown
-![Typing SVG](https://your-domain.vercel.app/api/typing?text=HELLO+WORLD&color=E80000&bg=000000&speed=3&fontSize=24)
+![Typing SVG](https://famicom-profile-readmes.vercel.app/api/typing?text=HELLO+WORLD&color=E80000&bg=000000&speed=3&fontSize=24)
 ```
 
 ### Multi-line Text
@@ -70,7 +74,7 @@ https://your-project-name.vercel.app/api/typing?text=HELLO+WORLD
 Specify text separated by commas to display typing animations in sequence:
 
 ```markdown
-![Typing SVG](https://your-domain.vercel.app/api/typing?text=Welcome,to+my+profile,Have+a+nice+day!&width=500&height=120)
+![Typing SVG](https://famicom-profile-readmes.vercel.app/api/typing?text=Welcome,to+my+profile,Have+a+nice+day!&width=500&height=120)
 ```
 
 ## Parameters
