@@ -326,8 +326,8 @@ function getTechColor(tech: string): { bg: string; text: string } {
  * 飛んでいく方向を計算（右斜め上に統一）
  */
 function getFlyDirection(index: number): { x: number; y: number } {
-  // すべて右斜め上に飛ぶ
-  return { x: 200, y: -400 };
+  // すべて右斜め上45度に真っ直ぐ飛ぶ
+  return { x: 350, y: -350 };
 }
 
 /**
