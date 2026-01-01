@@ -87,20 +87,28 @@ export function generateTypingSvg(options: Partial<SvgOptions>): string {
 
   // 各行のアニメーションを生成
   const textElements: string[] = [];
+  const cursorPositions: Array<{ x: number; y: number; time: number }> = [];
   let totalDelay = 0;
 
   lines.forEach((line, lineIndex) => {
     const y = startY + lineIndex * lineHeight;
     const chars = line.split('');
 
+    // 各文字のX位置を計算（等幅フォント想定）
+    const charWidth = opts.fontSize * 0.6;
+    const lineWidth = chars.length * charWidth;
+    const startX = (opts.width - lineWidth) / 2;
+
+    // 行の最初の位置をカーソル位置に追加
+    cursorPositions.push({
+      x: startX,
+      y: y,
+      time: totalDelay,
+    });
+
     chars.forEach((char, charIndex) => {
       const delay = totalDelay + charIndex * charDuration;
       const displayChar = char === ' ' ? '&#160;' : escapeXml(char);
-
-      // 各文字のX位置を計算（等幅フォント想定）
-      const charWidth = opts.fontSize * 0.6;
-      const lineWidth = chars.length * charWidth;
-      const startX = (opts.width - lineWidth) / 2;
       const x = startX + charIndex * charWidth;
 
       textElements.push(`
@@ -122,6 +130,13 @@ export function generateTypingSvg(options: Partial<SvgOptions>): string {
         fill="freeze"
       />
     </text>`);
+
+      // 次の文字の位置をカーソル位置に追加
+      cursorPositions.push({
+        x: x + charWidth,
+        y: y,
+        time: delay + charDuration,
+      });
     });
 
     // 次の行の開始遅延を計算
@@ -129,30 +144,47 @@ export function generateTypingSvg(options: Partial<SvgOptions>): string {
   });
 
   // カーソルのアニメーション
-  const cursorX = opts.width / 2;
-  const cursorY = startY;
   const cursorHeight = opts.fontSize;
   const totalDuration = totalDelay + 1;
+  const cursorWidth = opts.fontSize * 0.1; // カーソルの幅を細く
+
+  // animateのvalues属性用の位置とタイムを生成
+  const xValues = cursorPositions.map((pos) => pos.x).join(';');
+  const yValues = cursorPositions
+    .map((pos) => pos.y - cursorHeight + 4)
+    .join(';');
+  const keyTimes = cursorPositions
+    .map((pos) => (pos.time / totalDuration).toFixed(3))
+    .join(';');
 
   const cursor = `
     <rect
-      x="${cursorX}"
-      y="${cursorY - cursorHeight + 4}"
-      width="${opts.fontSize * 0.6}"
+      x="0"
+      y="0"
+      width="${cursorWidth}"
       height="${cursorHeight}"
       fill="#${color}"
     >
       <animate
+        attributeName="x"
+        values="${xValues}"
+        keyTimes="${keyTimes}"
+        dur="${totalDuration}s"
+        fill="freeze"
+      />
+      <animate
+        attributeName="y"
+        values="${yValues}"
+        keyTimes="${keyTimes}"
+        dur="${totalDuration}s"
+        fill="freeze"
+      />
+      <animate
         attributeName="opacity"
         values="1;1;0;0"
         keyTimes="0;0.5;0.5;1"
-        dur="1s"
+        dur="0.5s"
         repeatCount="indefinite"
-      />
-      <animateMotion
-        path="M0,0"
-        dur="${totalDuration}s"
-        fill="freeze"
       />
     </rect>`;
 
