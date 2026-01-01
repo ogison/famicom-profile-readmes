@@ -1,5 +1,31 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { generateMarioSvg, defaultMarioOptions } from '../src/lib/generateMarioSvg';
+import { generateMarioSvg, defaultMarioOptions, getSkillIconName } from '../src/lib/generateMarioSvg';
+
+/**
+ * skillicons.devの画像を取得してBase64エンコードする
+ */
+async function fetchSkillIconAsDataUri(skillName: string, theme: 'light' | 'dark'): Promise<string> {
+  try {
+    const iconName = getSkillIconName(skillName);
+    const url = `https://skillicons.dev/icons?i=${iconName}&theme=${theme}`;
+
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch icon: ${response.status}`);
+    }
+
+    const arrayBuffer = await response.arrayBuffer();
+    const base64 = Buffer.from(arrayBuffer).toString('base64');
+
+    // SVG形式の場合
+    const contentType = response.headers.get('content-type') || 'image/svg+xml';
+    return `data:${contentType};base64,${base64}`;
+  } catch (error) {
+    console.error(`Failed to fetch skill icon for ${skillName}:`, error);
+    // エラーの場合は空のData URIを返す
+    return '';
+  }
+}
 
 /**
  * GitHub Octocat風SVG生成APIエンドポイント（ファミコン風ドット絵アニメーション）
@@ -7,7 +33,7 @@ import { generateMarioSvg, defaultMarioOptions } from '../src/lib/generateMarioS
  * 使用例:
  * GET /api/mario?text=FULL+STACK+DEVELOPER&skills=React,Vue,Java,Python&bg=5C94FC
  */
-export default function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const { text, fontSize, color, bg, skills, font, useSkillIcons, skillIconsTheme } = req.query;
 
@@ -24,7 +50,26 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
       font: parseString(font) || defaultMarioOptions.font,
       useSkillIcons: parseBoolean(useSkillIcons) ?? defaultMarioOptions.useSkillIcons,
       skillIconsTheme: (parseString(skillIconsTheme) as 'light' | 'dark') || defaultMarioOptions.skillIconsTheme,
+      skillIconDataUris: {} as Record<string, string>,
     };
+
+    // skillicons.devを使用する場合、各アイコンをData URIとして取得
+    if (options.useSkillIcons) {
+      const skillsList = options.skills
+        .split(',')
+        .map((s) => s.trim())
+        .filter((s) => s.length > 0);
+
+      // 並列で全てのアイコンを取得
+      const dataUris = await Promise.all(
+        skillsList.map((skill) => fetchSkillIconAsDataUri(skill, options.skillIconsTheme))
+      );
+
+      // スキル名とData URIをマッピング
+      skillsList.forEach((skill, index) => {
+        options.skillIconDataUris[skill] = dataUris[index];
+      });
+    }
 
     // SVGを生成
     const svg = generateMarioSvg(options);
