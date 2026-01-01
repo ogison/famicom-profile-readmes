@@ -1,36 +1,36 @@
 /**
- * GitHub Octocat風SVG生成ライブラリ（ファミコン風ドット絵アニメーション）
- * GitHub README対応（SMIL/CSSアニメーション使用、JS不使用）
+ * GitHub Octocat-style SVG generation library (Famicom-style pixel art animation)
+ * GitHub README compatible (uses SMIL/CSS animations, no JS)
  */
 
 import { PRESS_START_2P_FONT_BASE64 } from './fontData';
 
 export interface MarioSvgOptions {
-  /** 表示テキスト */
+  /** Display text */
   text: string;
-  /** フォントサイズ（px） */
+  /** Font size (px) */
   fontSize: number;
-  /** SVG幅（px） */
+  /** SVG width (px) */
   width: number;
-  /** SVG高さ（px） */
+  /** SVG height (px) */
   height: number;
-  /** テキスト色（HEX、#なし） */
+  /** Text color (HEX without #) */
   color: string;
-  /** 背景色（HEX、#なし） */
+  /** Background color (HEX without #) */
   bg: string;
-  /** 技術スタック（カンマ区切り） */
+  /** Tech stack (comma-separated) */
   skills: string;
-  /** フォントファミリー */
+  /** Font family */
   font: string;
-  /** skillicons.devのアイコンを使用するか */
+  /** Whether to use skillicons.dev icons */
   useSkillIcons: boolean;
-  /** skilliconsのテーマ（light/dark） */
+  /** skillicons theme (light/dark) */
   skillIconsTheme: 'light' | 'dark';
-  /** skillアイコンのData URI（スキル名 -> Data URIのマッピング） */
+  /** Skill icon Data URIs (skill name -> Data URI mapping) */
   skillIconDataUris?: Record<string, string>;
 }
 
-/** デフォルト設定 */
+/** Default settings */
 export const defaultMarioOptions: MarioSvgOptions = {
   text: 'FULL STACK DEVELOPER',
   fontSize: 24,
@@ -45,7 +45,7 @@ export const defaultMarioOptions: MarioSvgOptions = {
 };
 
 /**
- * HEXカラーを検証・正規化
+ * Validate and normalize HEX color
  */
 function normalizeColor(color: string): string {
   const cleaned = color.replace(/^#/, '');
@@ -59,7 +59,7 @@ function normalizeColor(color: string): string {
 }
 
 /**
- * XML特殊文字をエスケープ
+ * Escape XML special characters
  */
 function escapeXml(str: string): string {
   return str
@@ -71,7 +71,7 @@ function escapeXml(str: string): string {
 }
 
 /**
- * Octocatキャラクターをドット絵で描画（3つのバリエーション）
+ * Draw Octocat character in pixel art (3 variations)
  */
 function createOctocatCharacter(
   x: number,
@@ -79,53 +79,53 @@ function createOctocatCharacter(
   scale: number = 1,
   variant: number = 0
 ): string {
-  const s = scale * 3; // ピクセルサイズ
+  const s = scale * 3; // Pixel size
 
-  // Octocatのドット絵パターン（10x10ピクセル、3種類のバリエーション）
+  // Octocat pixel art patterns (10x10 pixels, 3 variations)
   const octocatVariants = [
-    // バリエーション1: 正面向き基本形
+    // Variation 1: Basic front-facing form
     [
-      [0, 0, 0, 1, 0, 0, 1, 0, 0, 0], // 猫耳
+      [0, 0, 0, 1, 0, 0, 1, 0, 0, 0], // Cat ears
       [0, 0, 1, 1, 0, 0, 1, 1, 0, 0],
-      [0, 1, 2, 2, 2, 2, 2, 2, 1, 0], // 頭
+      [0, 1, 2, 2, 2, 2, 2, 2, 1, 0], // Head
       [1, 2, 2, 3, 2, 2, 3, 2, 2, 1],
-      [1, 2, 2, 2, 2, 2, 2, 2, 2, 1], // 顔
+      [1, 2, 2, 2, 2, 2, 2, 2, 2, 1], // Face
       [1, 2, 2, 4, 4, 4, 4, 2, 2, 1],
-      [0, 1, 2, 2, 2, 2, 2, 2, 1, 0], // 体
+      [0, 1, 2, 2, 2, 2, 2, 2, 1, 0], // Body
       [0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
-      [0, 1, 0, 1, 0, 0, 1, 0, 1, 0], // タコの足
+      [0, 1, 0, 1, 0, 0, 1, 0, 1, 0], // Tentacle legs
       [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     ],
-    // バリエーション2: 走っている形（足が動いている）
+    // Variation 2: Running form (legs moving)
     [
-      [0, 0, 0, 1, 0, 0, 1, 0, 0, 0], // 猫耳
+      [0, 0, 0, 1, 0, 0, 1, 0, 0, 0], // Cat ears
       [0, 0, 1, 1, 0, 0, 1, 1, 0, 0],
-      [0, 1, 2, 2, 2, 2, 2, 2, 1, 0], // 頭
+      [0, 1, 2, 2, 2, 2, 2, 2, 1, 0], // Head
       [1, 2, 2, 3, 2, 2, 3, 2, 2, 1],
-      [1, 2, 2, 2, 2, 2, 2, 2, 2, 1], // 顔
+      [1, 2, 2, 2, 2, 2, 2, 2, 2, 1], // Face
       [1, 2, 2, 4, 4, 4, 4, 2, 2, 1],
-      [0, 1, 2, 2, 2, 2, 2, 2, 1, 0], // 体
+      [0, 1, 2, 2, 2, 2, 2, 2, 1, 0], // Body
       [0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
-      [0, 0, 1, 0, 1, 1, 0, 1, 0, 0], // タコの足（動き1）
+      [0, 0, 1, 0, 1, 1, 0, 1, 0, 0], // Tentacle legs (movement 1)
       [0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
     ],
-    // バリエーション3: ジャンプしている形
+    // Variation 3: Jumping form
     [
-      [0, 0, 0, 1, 0, 0, 1, 0, 0, 0], // 猫耳
+      [0, 0, 0, 1, 0, 0, 1, 0, 0, 0], // Cat ears
       [0, 0, 1, 1, 0, 0, 1, 1, 0, 0],
-      [0, 1, 2, 2, 2, 2, 2, 2, 1, 0], // 頭
+      [0, 1, 2, 2, 2, 2, 2, 2, 1, 0], // Head
       [1, 2, 2, 3, 2, 2, 3, 2, 2, 1],
-      [1, 2, 2, 2, 2, 2, 2, 2, 2, 1], // 顔
+      [1, 2, 2, 2, 2, 2, 2, 2, 2, 1], // Face
       [1, 2, 2, 4, 4, 4, 4, 2, 2, 1],
-      [0, 1, 2, 2, 2, 2, 2, 2, 1, 0], // 体
+      [0, 1, 2, 2, 2, 2, 2, 2, 1, 0], // Body
       [0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
-      [1, 0, 0, 1, 0, 0, 1, 0, 0, 1], // タコの足（広がっている）
+      [1, 0, 0, 1, 0, 0, 1, 0, 0, 1], // Tentacle legs (spread out)
       [0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
     ],
   ];
 
-  // 色の定義（GitHub Octocat風）
-  // 0: 透明, 1: 黒（アウトライン）, 2: グレー（体）, 3: 白（目）, 4: ピンク（口）
+  // Color definitions (GitHub Octocat-style)
+  // 0: Transparent, 1: Black (outline), 2: Gray (body), 3: White (eyes), 4: Pink (mouth)
   const colors = ['none', '#24292f', '#6e7781', '#ffffff', '#ff69b4'];
 
   const pixels = octocatVariants[variant % 3];
@@ -143,7 +143,7 @@ function createOctocatCharacter(
 }
 
 /**
- * コインを描画
+ * Draw coin
  */
 function createCoin(x: number, y: number, delay: number = 0): string {
   return `
@@ -172,7 +172,7 @@ function createCoin(x: number, y: number, delay: number = 0): string {
 }
 
 /**
- * ハテナブロックを描画
+ * Draw question block
  */
 function createQuestionBlock(x: number, y: number, delay: number = 0): string {
   return `
@@ -193,7 +193,7 @@ function createQuestionBlock(x: number, y: number, delay: number = 0): string {
 }
 
 /**
- * 技術名からskillicons.devのアイコン名を取得
+ * Get skillicons.dev icon name from tech name
  */
 export function getSkillIconName(tech: string): string {
   const mapping: Record<string, string> = {
@@ -276,7 +276,7 @@ export function getSkillIconName(tech: string): string {
 }
 
 /**
- * 技術名に対応するカラーを取得
+ * Get color corresponding to tech name
  */
 function getTechColor(tech: string): { bg: string; text: string } {
   const colors: Record<string, { bg: string; text: string }> = {
@@ -323,15 +323,15 @@ function getTechColor(tech: string): { bg: string; text: string } {
 }
 
 /**
- * 飛んでいく方向を計算（右斜め上に統一）
+ * Calculate fly direction (unified to upper-right diagonal)
  */
 function getFlyDirection(index: number): { x: number; y: number } {
-  // すべて右斜め上に飛ぶ
+  // All fly to upper-right diagonal
   return { x: 200, y: -400 };
 }
 
 /**
- * 技術スタックアイコンを作成（ファミコン風ピクセルアートバッジまたはskillicons.dev）
+ * Create tech stack icon (Famicom-style pixel art badge or skillicons.dev)
  */
 function createTechIcon(
   tech: string,
@@ -347,29 +347,29 @@ function createTechIcon(
   const pixelSize = 4;
   const flyDir = getFlyDirection(index);
 
-  // 位置ベースの衝突判定
-  // Octocatのサイズ計算（スケール2.2、ピクセルサイズ3、10x10ドット）
+  // Position-based collision detection
+  // Calculate Octocat size (scale 2.2, pixel size 3, 10x10 dots)
   const octocatScale = 2.2;
   const octocatPixelSize = 3;
-  const octocatWidth = 10 * octocatPixelSize * octocatScale; // 約66ピクセル
+  const octocatWidth = 10 * octocatPixelSize * octocatScale; // About 66 pixels
 
-  // 衝突判定位置（Octocatの中心とアイコンの中心が重なる位置）
+  // Collision position (where Octocat's center and icon's center overlap)
   const collisionX = octocatX + octocatWidth / 2 + iconSize / 2;
 
-  // アイコンの移動パラメータ（各アイコンの開始位置から画面外まで移動）
-  const totalMoveDistance = x + 100; // 開始位置から画面左端を超えるまで移動
-  const animationDuration = 5; // 秒
+  // Icon movement parameters (move from each icon's start position to off-screen)
+  const totalMoveDistance = x + 100; // Move from start position beyond left edge
+  const animationDuration = 5; // Seconds
 
-  // アイコンの開始位置からの衝突までの移動距離
+  // Distance from icon's start position to collision
   const moveToCollision = x - collisionX;
 
-  // ヒット時間を計算（アイコンが衝突位置に到達する時間）
+  // Calculate hit time (time when icon reaches collision position)
   const hitTime = delay + (moveToCollision / totalMoveDistance) * animationDuration;
 
-  // skillicons.devを使用する場合
+  // When using skillicons.dev
   let badge: string;
   if (opts.useSkillIcons) {
-    // Data URIが提供されている場合はそれを使用、そうでない場合は外部URLを使用
+    // Use Data URI if provided, otherwise use external URL
     let skillIconUrl: string;
     if (opts.skillIconDataUris && opts.skillIconDataUris[tech]) {
       skillIconUrl = opts.skillIconDataUris[tech];
@@ -379,7 +379,7 @@ function createTechIcon(
     }
 
     badge = `
-    <!-- skillicons.devアイコン -->
+    <!-- skillicons.dev icon -->
     <image
       x="${x}"
       y="${y}"
@@ -391,20 +391,20 @@ function createTechIcon(
     />
   `;
   } else {
-    // ファミコン風のピクセルアートバッジ
+    // Famicom-style pixel art badge
     badge = `
-    <!-- バッジ背景（ピクセル風の角丸） -->
+    <!-- Badge background (pixel-style rounded corners) -->
     <rect x="${x + pixelSize}" y="${y}" width="${iconSize - pixelSize * 2}" height="${pixelSize}" fill="${colors.bg}"/>
     <rect x="${x}" y="${y + pixelSize}" width="${iconSize}" height="${iconSize - pixelSize * 2}" fill="${colors.bg}"/>
     <rect x="${x + pixelSize}" y="${y + iconSize - pixelSize}" width="${iconSize - pixelSize * 2}" height="${pixelSize}" fill="${colors.bg}"/>
 
-    <!-- ピクセル風の枠線 -->
+    <!-- Pixel-style border -->
     <rect x="${x + pixelSize}" y="${y}" width="${iconSize - pixelSize * 2}" height="${pixelSize}" fill="none" stroke="#000" stroke-width="1"/>
     <rect x="${x}" y="${y + pixelSize}" width="${pixelSize}" height="${iconSize - pixelSize * 2}" fill="#000"/>
     <rect x="${x + iconSize - pixelSize}" y="${y + pixelSize}" width="${pixelSize}" height="${iconSize - pixelSize * 2}" fill="#000"/>
     <rect x="${x + pixelSize}" y="${y + iconSize - pixelSize}" width="${iconSize - pixelSize * 2}" height="${pixelSize}" fill="none" stroke="#000" stroke-width="1"/>
 
-    <!-- 技術名の頭文字 -->
+    <!-- First letter of tech name -->
     <text
       x="${x + iconSize / 2}"
       y="${y + iconSize / 2 + 8}"
@@ -431,7 +431,7 @@ function createTechIcon(
         />
       </g>
 
-      <!-- 技術名 -->
+      <!-- Tech name -->
       <text x="${x + iconSize / 2}" y="${y + iconSize + 18}" font-size="10" fill="#FFF" text-anchor="middle" font-family="'Press Start 2P', monospace" stroke="#000" stroke-width="1" paint-order="stroke">
         ${escapeXml(tech)}
         <animate
@@ -444,7 +444,7 @@ function createTechIcon(
         />
       </text>
 
-      <!-- 右から左への移動アニメーション -->
+      <!-- Right to left movement animation -->
       <animateMotion
         path="M 0,0 L -${totalMoveDistance},0"
         dur="5s"
@@ -452,7 +452,7 @@ function createTechIcon(
         fill="freeze"
       />
 
-      <!-- ヒット時の画面外に飛ぶアニメーション -->
+      <!-- Animation to fly off-screen on hit -->
       <animateTransform
         attributeName="transform"
         type="translate"
@@ -466,23 +466,23 @@ function createTechIcon(
 }
 
 /**
- * Octocatが走って技術アイコンを倒すアニメーション
+ * Octocat running and knocking down tech icons animation
  */
 function generateRunningMario(opts: MarioSvgOptions): string {
-  // 技術スタックを解析
+  // Parse tech stack
   const skills = opts.skills
     .split(',')
     .map((s) => s.trim())
     .filter((s) => s.length > 0);
 
-  // Octocatの位置（横幅400に合わせて左寄せ）
+  // Octocat position (left-aligned for width 400)
   const octocatY = opts.height - 130;
   const octocatX = 50;
 
-  // Octocatキャラクター（3つのバリエーションを切り替えながら走るアニメーション）
+  // Octocat character (running animation switching between 3 variations)
   const octocat = `
     <g id="octocat-runner">
-      <!-- バリエーション1: 基本形 -->
+      <!-- Variation 1: Basic form -->
       <g id="octocat-var-0">
         ${createOctocatCharacter(octocatX, octocatY, 2.2, 0)}
         <animate
@@ -493,7 +493,7 @@ function generateRunningMario(opts: MarioSvgOptions): string {
           repeatCount="indefinite"
         />
       </g>
-      <!-- バリエーション2: 走り -->
+      <!-- Variation 2: Running -->
       <g id="octocat-var-1">
         ${createOctocatCharacter(octocatX, octocatY, 2.2, 1)}
         <animate
@@ -504,7 +504,7 @@ function generateRunningMario(opts: MarioSvgOptions): string {
           repeatCount="indefinite"
         />
       </g>
-      <!-- バリエーション3: ジャンプ -->
+      <!-- Variation 3: Jump -->
       <g id="octocat-var-2">
         ${createOctocatCharacter(octocatX, octocatY, 2.2, 2)}
         <animate
@@ -515,7 +515,7 @@ function generateRunningMario(opts: MarioSvgOptions): string {
           repeatCount="indefinite"
         />
       </g>
-      <!-- 走るアニメーション（上下の動き） -->
+      <!-- Running animation (up and down movement) -->
       <animateTransform
         attributeName="transform"
         type="translate"
@@ -526,18 +526,18 @@ function generateRunningMario(opts: MarioSvgOptions): string {
       />
     </g>`;
 
-  // 技術アイコンを生成（右から流れてくる）
+  // Generate tech icons (flowing from right)
   const techIcons = skills
     .map((tech, i) => {
-      const startX = opts.width + 50 + i * 100; // 横幅400に合わせて間隔を調整
+      const startX = opts.width + 50 + i * 100; // Adjust spacing for width 400
       const iconY = octocatY - 10;
-      const delay = 1.5 + i * 1.0; // 順番に出現（テンポを速く）
+      const delay = 1.5 + i * 1.0; // Appear in sequence (faster tempo)
 
       return createTechIcon(tech, startX, iconY, delay, opts, i, octocatX);
     })
     .join('');
 
-  // スコア表示（倒した技術の数）
+  // Score display (number of tech knocked down)
   const scoreText = `
     <text
       x="30"
@@ -556,17 +556,17 @@ function generateRunningMario(opts: MarioSvgOptions): string {
 }
 
 /**
- * GitHub Octocat風SVGを生成（ファミコン風ドット絵）
+ * Generate GitHub Octocat-style SVG (Famicom-style pixel art)
  */
 export function generateMarioSvg(options: Partial<MarioSvgOptions>): string {
   const opts: MarioSvgOptions = { ...defaultMarioOptions, ...options };
 
   const bg = normalizeColor(opts.bg);
 
-  // Octocatが走って技術を倒すアニメーション
+  // Octocat running and knocking down tech animation
   const content = generateRunningMario(opts);
 
-  // フォントスタイルを生成（Press Start 2P フォントをBase64埋め込み）
+  // Generate font style (embed Press Start 2P font as Base64)
   let fontStyle = '';
   if (opts.font === 'Press Start 2P' && PRESS_START_2P_FONT_BASE64) {
     fontStyle = `
@@ -582,7 +582,7 @@ export function generateMarioSvg(options: Partial<MarioSvgOptions>): string {
   </defs>`;
   }
 
-  // 地面を追加（レトロゲーム風）
+  // Add ground (retro game style)
   const ground = `
     <rect x="0" y="${opts.height - 40}" width="${opts.width}" height="40" fill="#8B4513"/>
     <rect x="0" y="${opts.height - 38}" width="${opts.width}" height="4" fill="#A0522D"/>`;
