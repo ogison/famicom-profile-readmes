@@ -549,7 +549,8 @@ function generateRunningMario(opts: MarioSvgOptions): string {
 
   // Generate tech icons (flowing from right, looped for continuous stream)
   const hasSkills = skills.length > 0;
-  const minFlowIcons = 8;
+  // Need 100 icons to reach score of 100
+  const minFlowIcons = 100;
   const flowCount = hasSkills ? Math.max(skills.length, minFlowIcons) : 0;
   const flowSkills = hasSkills
     ? Array.from({ length: flowCount }, (_, i) => skills[i % skills.length])
