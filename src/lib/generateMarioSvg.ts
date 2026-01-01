@@ -547,12 +547,22 @@ function generateRunningMario(opts: MarioSvgOptions): string {
       />
     </g>`;
 
-  // Generate tech icons (flowing from right)
-  const techIcons = skills
+  // Generate tech icons (flowing from right, looped for continuous stream)
+  const hasSkills = skills.length > 0;
+  const minFlowIcons = 8;
+  const flowCount = hasSkills ? Math.max(skills.length, minFlowIcons) : 0;
+  const flowSkills = hasSkills
+    ? Array.from({ length: flowCount }, (_, i) => skills[i % skills.length])
+    : [];
+  const iconSpacing = 90;
+  const delaySpacing = 0.8;
+  const baseDelay = 0.5;
+
+  const techIcons = flowSkills
     .map((tech, i) => {
-      const startX = opts.width + 50 + i * 100; // Adjust spacing for width 400
+      const startX = opts.width + 50 + i * iconSpacing; // Adjust spacing for width 400
       const iconY = octocatY - 10;
-      const delay = 1.5 + i * 1.0; // Appear in sequence (faster tempo)
+      const delay = baseDelay + i * delaySpacing; // Appear in sequence (steady tempo)
 
       return createTechIcon(tech, startX, iconY, delay, opts, i, octocatX);
     })
