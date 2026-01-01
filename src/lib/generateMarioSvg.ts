@@ -26,6 +26,8 @@ export interface MarioSvgOptions {
   useSkillIcons: boolean;
   /** skilliconsのテーマ（light/dark） */
   skillIconsTheme: 'light' | 'dark';
+  /** skillアイコンのData URI（スキル名 -> Data URIのマッピング） */
+  skillIconDataUris?: Record<string, string>;
 }
 
 /** デフォルト設定 */
@@ -193,7 +195,7 @@ function createQuestionBlock(x: number, y: number, delay: number = 0): string {
 /**
  * 技術名からskillicons.devのアイコン名を取得
  */
-function getSkillIconName(tech: string): string {
+export function getSkillIconName(tech: string): string {
   const mapping: Record<string, string> = {
     React: 'react',
     Vue: 'vue',
@@ -376,8 +378,15 @@ function createTechIcon(
   // skillicons.devを使用する場合
   let badge: string;
   if (opts.useSkillIcons) {
-    const skillIconName = getSkillIconName(tech);
-    const skillIconUrl = `https://skillicons.dev/icons?i=${skillIconName}&theme=${opts.skillIconsTheme}`;
+    // Data URIが提供されている場合はそれを使用、そうでない場合は外部URLを使用
+    let skillIconUrl: string;
+    if (opts.skillIconDataUris && opts.skillIconDataUris[tech]) {
+      skillIconUrl = opts.skillIconDataUris[tech];
+    } else {
+      const skillIconName = getSkillIconName(tech);
+      skillIconUrl = `https://skillicons.dev/icons?i=${skillIconName}&theme=${opts.skillIconsTheme}`;
+    }
+
     badge = `
     <!-- skillicons.devアイコン -->
     <image
