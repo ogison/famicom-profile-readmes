@@ -90,13 +90,6 @@ export function generateTypingSvg(options: Partial<SvgOptions>): string {
   const cursorPositions: Array<{ x: number; y: number; time: number }> = [];
   let totalDelay = 0;
 
-  // Add initial cursor position off-screen
-  cursorPositions.push({
-    x: -100,
-    y: -100,
-    time: 0,
-  });
-
   lines.forEach((line, lineIndex) => {
     const y = startY + lineIndex * lineHeight;
     const chars = line.split('');
@@ -110,6 +103,16 @@ export function generateTypingSvg(options: Partial<SvgOptions>): string {
       const delay = totalDelay + charIndex * charDuration;
       const displayChar = char === ' ' ? '&#160;' : escapeXml(char);
       const x = startX + charIndex * charWidth;
+      const cursorX = x + charWidth;
+
+      // For the first character, add initial cursor position at time 0
+      if (charIndex === 0 && lineIndex === 0) {
+        cursorPositions.push({
+          x: cursorX,
+          y: y,
+          time: 0,
+        });
+      }
 
       textElements.push(`
     <text
@@ -131,11 +134,11 @@ export function generateTypingSvg(options: Partial<SvgOptions>): string {
       />
     </text>`);
 
-      // Add cursor position after character is displayed
+      // Add cursor position after character is fully displayed
       cursorPositions.push({
-        x: x + charWidth,
+        x: cursorX,
         y: y,
-        time: delay + charDuration,
+        time: delay + 0.1, // Character display animation completes
       });
     });
 
