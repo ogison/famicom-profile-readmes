@@ -267,17 +267,8 @@
             <p class="hint">倒す技術のアイコンを指定します</p>
           </div>
 
-          <div class="form-group" id="iconStyleGroup" style="display: none">
-            <label for="iconStyle">アイコンスタイル</label>
-            <select id="iconStyle">
-              <option value="pixel">ピクセル風（デフォルト）</option>
-              <option value="skillicons">skillicons.dev</option>
-            </select>
-            <p class="hint">skillicons.devを使うとリッチなアイコンが表示されます</p>
-          </div>
-
           <div class="form-group" id="iconThemeGroup" style="display: none">
-            <label for="iconTheme">アイコンテーマ</label>
+            <label for="iconTheme">アイコンテーマ（skillicons.dev）</label>
             <select id="iconTheme">
               <option value="dark">ダーク</option>
               <option value="light">ライト</option>
@@ -380,8 +371,6 @@
       const textGroup = document.getElementById('textGroup');
       const skillsInput = document.getElementById('skills');
       const skillsGroup = document.getElementById('skillsGroup');
-      const iconStyleSelect = document.getElementById('iconStyle');
-      const iconStyleGroup = document.getElementById('iconStyleGroup');
       const iconThemeSelect = document.getElementById('iconTheme');
       const iconThemeGroup = document.getElementById('iconThemeGroup');
       const textHint = document.getElementById('textHint');
@@ -413,8 +402,7 @@
 
         if (isMarioMode) {
           skillsGroup.style.display = 'block';
-          iconStyleGroup.style.display = 'block';
-          iconThemeGroup.style.display = iconStyleSelect.value === 'skillicons' ? 'block' : 'none';
+          iconThemeGroup.style.display = 'block';
           textGroup.style.display = 'none';
           speedGroup.style.display = 'none';
           colorRow.style.display = 'none';
@@ -423,7 +411,6 @@
           sizeRow.style.display = 'none';
         } else {
           skillsGroup.style.display = 'none';
-          iconStyleGroup.style.display = 'none';
           iconThemeGroup.style.display = 'none';
           textGroup.style.display = 'block';
           speedGroup.style.display = 'block';
@@ -444,12 +431,7 @@
         updatePreview();
       });
 
-      // Icon style change handler
-      iconStyleSelect.addEventListener('change', () => {
-        iconThemeGroup.style.display = iconStyleSelect.value === 'skillicons' ? 'block' : 'none';
-        updatePreview();
-      });
-
+      // Icon theme change handler
       iconThemeSelect.addEventListener('change', updatePreview);
 
       // Sync color picker with hex input
@@ -515,11 +497,10 @@
 
         if (isMarioMode) {
           // Octocatモードではwidth/heightは常に400x250で固定（設定不可）
+          // アイコンスタイルは常にskillicons.devを使用
           params.set('skills', skillsInput.value);
-          if (iconStyleSelect.value === 'skillicons') {
-            params.set('useSkillIcons', 'true');
-            params.set('skillIconsTheme', iconThemeSelect.value);
-          }
+          params.set('useSkillIcons', 'true');
+          params.set('skillIconsTheme', iconThemeSelect.value);
           return `${baseUrl}/api/mario?${params.toString()}`;
         } else {
           params.set('width', widthInput.value);
