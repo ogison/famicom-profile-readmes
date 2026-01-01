@@ -323,20 +323,11 @@ function getTechColor(tech: string): { bg: string; text: string } {
 }
 
 /**
- * 飛んでいく方向を計算（インデックスに基づいてバリエーション）
+ * 飛んでいく方向を計算（右斜め上に統一）
  */
 function getFlyDirection(index: number): { x: number; y: number } {
-  // 様々な方向に飛ばす（上方向をメインに、斜め方向も含む）
-  const directions = [
-    { x: -100, y: -400 }, // 左上に飛ぶ
-    { x: 200, y: -350 }, // 右上に飛ぶ
-    { x: -150, y: -300 }, // 左上（浅め）
-    { x: 250, y: -450 }, // 右上（高め）
-    { x: 0, y: -500 }, // 真上に飛ぶ
-    { x: -200, y: -380 }, // 左上に飛ぶ
-    { x: 180, y: -420 }, // 右上に飛ぶ
-  ];
-  return directions[index % directions.length];
+  // すべて右斜め上に飛ぶ
+  return { x: 200, y: -400 };
 }
 
 /**
@@ -461,17 +452,6 @@ function createTechIcon(
         fill="freeze"
       />
 
-      <!-- ヒット時の回転アニメーション -->
-      <animateTransform
-        id="mario-hit-${tech}"
-        attributeName="transform"
-        type="rotate"
-        from="0 ${x + iconSize / 2} ${y + iconSize / 2}"
-        to="${720 + (index % 3) * 180} ${x + iconSize / 2} ${y + iconSize / 2}"
-        dur="0.8s"
-        begin="${hitTime}s"
-        fill="freeze"
-      />
       <!-- ヒット時の画面外に飛ぶアニメーション -->
       <animateTransform
         attributeName="transform"
