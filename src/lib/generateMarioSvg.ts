@@ -554,13 +554,12 @@ function generateRunningMario(opts: MarioSvgOptions): string {
   const flowSkills = hasSkills
     ? Array.from({ length: flowCount }, (_, i) => skills[i % skills.length])
     : [];
-  const iconSpacing = 90;
   const delaySpacing = 0.8;
   const baseDelay = 0.5;
+  const startX = opts.width + 50;
 
   const techIcons = flowSkills
     .map((tech, i) => {
-      const startX = opts.width + 50 + i * iconSpacing; // Adjust spacing for width 400
       const iconY = octocatY - 10;
       const delay = baseDelay + i * delaySpacing; // Appear in sequence (steady tempo)
 
