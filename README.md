@@ -2,62 +2,7 @@
 
 A Vercel Serverless Functions API that generates **typing animation SVGs** displayable on GitHub README.
 
-**🎮 デプロイ済みURL**: https://famicom-profile-readmes.vercel.app/
-
-## 日本語ガイド
-
-### 使い方
-
-GitHub READMEにタイピングアニメーションを追加できます。以下のようにMarkdownに記述するだけです：
-
-```markdown
-![Typing SVG](https://famicom-profile-readmes.vercel.app/api/typing?text=Hello+World)
-```
-
-### 基本的な使用例
-
-#### シンプルなメッセージ
-```markdown
-![Typing SVG](https://famicom-profile-readmes.vercel.app/api/typing?text=HELLO+WORLD)
-```
-
-#### レトロゲーム風
-```markdown
-![Typing SVG](https://famicom-profile-readmes.vercel.app/api/typing?text=GAME+START&color=00FF00&bg=000000&fontSize=20)
-```
-
-#### ターミナル風
-```markdown
-![Typing SVG](https://famicom-profile-readmes.vercel.app/api/typing?text=$+npm+install&color=FFFFFF&bg=1E1E1E&font=monospace)
-```
-
-#### 複数行メッセージ
-カンマ区切りでテキストを指定すると、順番にタイピングアニメーションが表示されます：
-
-```markdown
-![Typing SVG](https://famicom-profile-readmes.vercel.app/api/typing?text=Welcome,to+my+profile,Have+a+nice+day!&width=500&height=120)
-```
-
-### カスタマイズパラメータ
-
-| パラメータ | 説明 | デフォルト値 | 例 |
-| --- | --- | --- | --- |
-| `text` | 表示するテキスト（カンマ区切りで複数行） | `Hello World` | `text=こんにちは+世界` |
-| `fontSize` | フォントサイズ（px） | `20` | `fontSize=24` |
-| `width` | SVGの幅（px） | `400` | `width=500` |
-| `height` | SVGの高さ（px） | `50` | `height=100` |
-| `color` | テキストの色（#なしのHEX） | `00FF00` | `color=E80000` |
-| `bg` | 背景色（#なしのHEX） | `000000` | `bg=1a1a1a` |
-| `speed` | アニメーション速度（1-5、5が最速） | `3` | `speed=4` |
-| `font` | フォントファミリー | `Press Start 2P` | `font=monospace` |
-
-### 注意事項
-
-- GitHubのREADMEでは、キャッシュの影響で初回読み込み時のみアニメーションが再生される場合があります
-- テキストが長すぎる、または行数が多すぎるとSVGサイズが大きくなり、パフォーマンスに影響する可能性があります
-- テキストの長さに応じて`width`と`height`を適切に調整してください
-
----
+**🎮 Live Demo**: https://famicom-profile-readmes.vercel.app/
 
 ## Overview
 
