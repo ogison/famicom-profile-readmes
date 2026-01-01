@@ -99,12 +99,14 @@ export function generateTypingSvg(options: Partial<SvgOptions>): string {
     const lineWidth = chars.length * charWidth;
     const startX = (opts.width - lineWidth) / 2;
 
-    // Add initial line position to cursor positions
-    cursorPositions.push({
-      x: startX,
-      y: y,
-      time: totalDelay,
-    });
+    // Add initial line position to cursor positions (only for first line)
+    if (lineIndex === 0) {
+      cursorPositions.push({
+        x: startX,
+        y: y,
+        time: totalDelay,
+      });
+    }
 
     chars.forEach((char, charIndex) => {
       const delay = totalDelay + charIndex * charDuration;
