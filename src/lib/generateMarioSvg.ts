@@ -456,7 +456,7 @@ function createTechIcon(
           keyTimes="0;${collisionKeyTime};1"
           dur="${totalAnimDuration}s"
           begin="${delay}s"
-          repeatCount="indefinite"
+          fill="freeze"
         />
       </g>
 
@@ -469,7 +469,7 @@ function createTechIcon(
           keyTimes="0;${collisionKeyTime};1"
           dur="${totalAnimDuration}s"
           begin="${delay}s"
-          repeatCount="indefinite"
+          fill="freeze"
         />
       </text>
 
@@ -481,7 +481,7 @@ function createTechIcon(
         keyTimes="0; ${collisionKeyTime}; 1"
         dur="${totalAnimDuration}s"
         begin="${delay}s"
-        repeatCount="indefinite"
+        fill="freeze"
       />
     </g>`;
 }
@@ -549,7 +549,8 @@ function generateRunningMario(opts: MarioSvgOptions): string {
 
   // Generate tech icons (flowing from right, looped for continuous stream)
   const hasSkills = skills.length > 0;
-  const minFlowIcons = 8;
+  // Need 100 icons to reach score of 100
+  const minFlowIcons = 100;
   const flowCount = hasSkills ? Math.max(skills.length, minFlowIcons) : 0;
   const flowSkills = hasSkills
     ? Array.from({ length: flowCount }, (_, i) => skills[i % skills.length])
@@ -557,6 +558,22 @@ function generateRunningMario(opts: MarioSvgOptions): string {
   const delaySpacing = opts.useSkillIcons ? 1.2 : 0.8;
   const baseDelay = 0.5;
   const startX = opts.width + 50;
+
+  // Calculate collision times for score updates
+  const iconSize = 50;
+  const octocatScale = 2.2;
+  const octocatPixelSize = 3;
+  const octocatWidth = 10 * octocatPixelSize * octocatScale;
+  const collisionX = octocatX + octocatWidth / 2 + iconSize / 2;
+  const totalMoveDistance = startX + 100;
+  const animationDuration = 5;
+  const moveToCollision = startX - collisionX;
+
+  const collisionTimes = flowSkills.map((tech, i) => {
+    const delay = baseDelay + i * delaySpacing;
+    const collisionDuration = (moveToCollision / totalMoveDistance) * animationDuration;
+    return delay + collisionDuration;
+  });
 
   const techIcons = flowSkills
     .map((tech, i) => {
@@ -567,22 +584,94 @@ function generateRunningMario(opts: MarioSvgOptions): string {
     })
     .join('');
 
-  // Score display (number of tech knocked down)
-  const scoreText = `
-    <text
-      x="30"
-      y="30"
-      fill="#FFFFFF"
-      font-family="'${opts.font}', monospace"
-      font-size="16"
-      stroke="#000000"
-      stroke-width="2"
-      paint-order="stroke"
-    >
-      SCORE: ${skills.length * 100}
-    </text>`;
+  // Score display with incremental updates
+  // Create score values from 0 to min(flowCount, 100)
+  const maxScore = Math.min(flowCount, 100);
+  const scoreElements = Array.from({ length: maxScore + 1 }, (_, score) => {
+    const showStart = score === 0 ? '0s' : `${collisionTimes[score - 1]}s`;
+    const hideStart = score < maxScore ? `${collisionTimes[score]}s` : 'indefinite';
 
-  return `${octocat}${techIcons}${scoreText}`;
+    return `
+      <text
+        x="30"
+        y="30"
+        fill="#FFFFFF"
+        font-family="'${opts.font}', monospace"
+        font-size="16"
+        stroke="#000000"
+        stroke-width="2"
+        paint-order="stroke"
+        opacity="${score === 0 ? '1' : '0'}"
+      >
+        SCORE: ${score}
+        ${score > 0 ? `
+        <set attributeName="opacity" to="1" begin="${showStart}" fill="freeze" />` : ''}
+        ${hideStart !== 'indefinite' ? `
+        <set attributeName="opacity" to="0" begin="${hideStart}" fill="freeze" />` : ''}
+      </text>`;
+  }).join('');
+
+  const scoreText = `
+    <g id="score-display">
+      ${scoreElements}
+    </g>`;
+
+  // Clear screen (appears when score reaches 50)
+  const hasClearScreen = maxScore >= 50;
+  const clearTime = hasClearScreen ? collisionTimes[49] : 999;
+  const clearScreen = hasClearScreen ? `
+    <g id="game-elements">
+      ${octocat}
+      ${techIcons}
+      ${scoreText}
+      <animate
+        attributeName="opacity"
+        from="1"
+        to="0"
+        begin="${clearTime}s"
+        dur="0.5s"
+        fill="freeze"
+      />
+    </g>
+    <g id="clear-screen" opacity="0">
+      <rect width="100%" height="100%" fill="#000000" />
+      <text
+        x="${opts.width / 2}"
+        y="${opts.height / 2 - 30}"
+        fill="#FFD700"
+        font-family="'${opts.font}', monospace"
+        font-size="32"
+        text-anchor="middle"
+        stroke="#000000"
+        stroke-width="3"
+        paint-order="stroke"
+      >
+        CLEAR!
+      </text>
+      <text
+        x="${opts.width / 2}"
+        y="${opts.height / 2 + 20}"
+        fill="#FFFFFF"
+        font-family="'${opts.font}', monospace"
+        font-size="16"
+        text-anchor="middle"
+        stroke="#000000"
+        stroke-width="2"
+        paint-order="stroke"
+      >
+        SCORE: 50
+      </text>
+      <animate
+        attributeName="opacity"
+        from="0"
+        to="1"
+        begin="${clearTime}s"
+        dur="0.5s"
+        fill="freeze"
+      />
+    </g>` : `${octocat}${techIcons}${scoreText}`;
+
+  return clearScreen;
 }
 
 /**
