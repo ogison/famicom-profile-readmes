@@ -2,9 +2,9 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { generateMarioSvg, defaultMarioOptions, getSkillIconName } from '../src/lib/generateMarioSvg';
 
 /**
- * Fetch skillicons.dev image and encode as Base64
+ * Fetch skillicons.dev SVG content directly
  */
-async function fetchSkillIconAsDataUri(skillName: string, theme: 'light' | 'dark'): Promise<string> {
+async function fetchSkillIconAsSvg(skillName: string, theme: 'light' | 'dark'): Promise<string> {
   try {
     const iconName = getSkillIconName(skillName);
     const url = `https://skillicons.dev/icons?i=${iconName}&theme=${theme}`;
@@ -14,15 +14,12 @@ async function fetchSkillIconAsDataUri(skillName: string, theme: 'light' | 'dark
       throw new Error(`Failed to fetch icon: ${response.status}`);
     }
 
-    const arrayBuffer = await response.arrayBuffer();
-    const base64 = Buffer.from(arrayBuffer).toString('base64');
-
-    // For SVG format
-    const contentType = response.headers.get('content-type') || 'image/svg+xml';
-    return `data:${contentType};base64,${base64}`;
+    // Get SVG content as text
+    const svgContent = await response.text();
+    return svgContent;
   } catch (error) {
     console.error(`Failed to fetch skill icon for ${skillName}:`, error);
-    // Return empty Data URI on error
+    // Return empty string on error
     return '';
   }
 }
@@ -50,10 +47,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       font: parseString(font) || defaultMarioOptions.font,
       useSkillIcons: parseBoolean(useSkillIcons) ?? defaultMarioOptions.useSkillIcons,
       skillIconsTheme: (parseString(skillIconsTheme) as 'light' | 'dark') || defaultMarioOptions.skillIconsTheme,
-      skillIconDataUris: {} as Record<string, string>,
+      skillIconSvgs: {} as Record<string, string>,
     };
 
-    // When using skillicons.dev, fetch each icon as Data URI
+    // When using skillicons.dev, fetch each icon as SVG content
     if (options.useSkillIcons) {
       const skillsList = options.skills
         .split(',')
@@ -61,13 +58,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         .filter((s) => s.length > 0);
 
       // Fetch all icons in parallel
-      const dataUris = await Promise.all(
-        skillsList.map((skill) => fetchSkillIconAsDataUri(skill, options.skillIconsTheme))
+      const svgContents = await Promise.all(
+        skillsList.map((skill) => fetchSkillIconAsSvg(skill, options.skillIconsTheme))
       );
 
-      // Map skill names to Data URIs
+      // Map skill names to SVG content
       skillsList.forEach((skill, index) => {
-        options.skillIconDataUris[skill] = dataUris[index];
+        options.skillIconSvgs[skill] = svgContents[index];
       });
     }
 

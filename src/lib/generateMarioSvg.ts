@@ -26,8 +26,8 @@ export interface MarioSvgOptions {
   useSkillIcons: boolean;
   /** skillicons theme (light/dark) */
   skillIconsTheme: 'light' | 'dark';
-  /** Skill icon Data URIs (skill name -> Data URI mapping) */
-  skillIconDataUris?: Record<string, string>;
+  /** Skill icon SVG content (skill name -> SVG string mapping) */
+  skillIconSvgs?: Record<string, string>;
 }
 
 /** Default settings */
@@ -369,29 +369,55 @@ function createTechIcon(
   // When using skillicons.dev
   let badge: string;
   if (opts.useSkillIcons) {
-    // Use Data URI if provided, otherwise use external URL
-    let skillIconUrl: string;
-    if (opts.skillIconDataUris && opts.skillIconDataUris[tech]) {
-      skillIconUrl = opts.skillIconDataUris[tech];
-    } else {
-      const skillIconName = getSkillIconName(tech);
-      skillIconUrl = `https://skillicons.dev/icons?i=${skillIconName}&theme=${opts.skillIconsTheme}`;
-    }
+    // Use SVG content if provided, otherwise fall back to pixel art
+    if (opts.skillIconSvgs && opts.skillIconSvgs[tech] && opts.skillIconSvgs[tech].trim() !== '') {
+      const svgContent = opts.skillIconSvgs[tech];
+      // Extract the inner content of the SVG (remove outer <svg> tag)
+      const svgMatch = svgContent.match(/<svg[^>]*>([\s\S]*)<\/svg>/i);
+      const innerSvg = svgMatch ? svgMatch[1] : svgContent;
 
-    badge = `
-    <!-- skillicons.dev icon -->
-    <image
+      badge = `
+    <!-- skillicons.dev icon embedded -->
+    <svg
       x="${x}"
       y="${y}"
       width="${iconSize}"
       height="${iconSize}"
-      href="${skillIconUrl}"
-      xlink:href="${skillIconUrl}"
-      preserveAspectRatio="xMidYMid meet"
-    />
+      viewBox="0 0 256 256"
+    >
+      ${innerSvg}
+    </svg>
   `;
+    } else {
+      // Fall back to pixel art badge if SVG content is not available
+      const colors = getTechColor(tech);
+      badge = `
+    <!-- Badge background (pixel-style rounded corners) -->
+    <rect x="${x + pixelSize}" y="${y}" width="${iconSize - pixelSize * 2}" height="${pixelSize}" fill="${colors.bg}"/>
+    <rect x="${x}" y="${y + pixelSize}" width="${iconSize}" height="${iconSize - pixelSize * 2}" fill="${colors.bg}"/>
+    <rect x="${x + pixelSize}" y="${y + iconSize - pixelSize}" width="${iconSize - pixelSize * 2}" height="${pixelSize}" fill="${colors.bg}"/>
+
+    <!-- Pixel-style border -->
+    <rect x="${x + pixelSize}" y="${y}" width="${iconSize - pixelSize * 2}" height="${pixelSize}" fill="none" stroke="#000" stroke-width="1"/>
+    <rect x="${x}" y="${y + pixelSize}" width="${pixelSize}" height="${iconSize - pixelSize * 2}" fill="#000"/>
+    <rect x="${x + iconSize - pixelSize}" y="${y + pixelSize}" width="${pixelSize}" height="${iconSize - pixelSize * 2}" fill="#000"/>
+    <rect x="${x + pixelSize}" y="${y + iconSize - pixelSize}" width="${iconSize - pixelSize * 2}" height="${pixelSize}" fill="none" stroke="#000" stroke-width="1"/>
+
+    <!-- First letter of tech name -->
+    <text
+      x="${x + iconSize / 2}"
+      y="${y + iconSize / 2 + 8}"
+      font-size="20"
+      font-weight="bold"
+      fill="${colors.text}"
+      text-anchor="middle"
+      font-family="'Press Start 2P', monospace"
+    >${escapeXml(tech.charAt(0).toUpperCase())}</text>
+  `;
+    }
   } else {
     // Famicom-style pixel art badge
+    const colors = getTechColor(tech);
     badge = `
     <!-- Badge background (pixel-style rounded corners) -->
     <rect x="${x + pixelSize}" y="${y}" width="${iconSize - pixelSize * 2}" height="${pixelSize}" fill="${colors.bg}"/>
