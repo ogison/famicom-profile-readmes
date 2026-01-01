@@ -417,6 +417,14 @@ function createTechIcon(
   `;
   }
 
+  // Calculate animation duration
+  const collisionDuration = (moveToCollision / totalMoveDistance) * animationDuration; // Duration until collision
+  const flyDuration = 0.8; // Duration of flight
+  const totalAnimDuration = collisionDuration + flyDuration;
+
+  // Calculate keyTimes (collision time position in 0-1 range)
+  const collisionKeyTime = collisionDuration / totalAnimDuration;
+
   return `
     <g id="tech-${tech}-${delay}">
       <g>
@@ -444,22 +452,14 @@ function createTechIcon(
         />
       </text>
 
-      <!-- Right to left movement animation -->
-      <animateMotion
-        path="M 0,0 L -${totalMoveDistance},0"
-        dur="5s"
-        begin="${delay}s"
-        fill="freeze"
-      />
-
-      <!-- Animation to fly off-screen on hit -->
+      <!-- Movement animation: horizontal movement until collision, then straight diagonal flight -->
       <animateTransform
         attributeName="transform"
         type="translate"
-        additive="sum"
-        values="0,0; ${flyDir.x},${flyDir.y}"
-        dur="0.8s"
-        begin="${hitTime}s"
+        values="0,0; -${moveToCollision},0; ${-moveToCollision + flyDir.x},${flyDir.y}"
+        keyTimes="0; ${collisionKeyTime}; 1"
+        dur="${totalAnimDuration}s"
+        begin="${delay}s"
         fill="freeze"
       />
     </g>`;
