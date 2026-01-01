@@ -2,7 +2,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { generateMarioSvg, defaultMarioOptions, getSkillIconName } from '../src/lib/generateMarioSvg';
 
 /**
- * skillicons.devの画像を取得してBase64エンコードする
+ * Fetch skillicons.dev image and encode as Base64
  */
 async function fetchSkillIconAsDataUri(skillName: string, theme: 'light' | 'dark'): Promise<string> {
   try {
@@ -17,28 +17,28 @@ async function fetchSkillIconAsDataUri(skillName: string, theme: 'light' | 'dark
     const arrayBuffer = await response.arrayBuffer();
     const base64 = Buffer.from(arrayBuffer).toString('base64');
 
-    // SVG形式の場合
+    // For SVG format
     const contentType = response.headers.get('content-type') || 'image/svg+xml';
     return `data:${contentType};base64,${base64}`;
   } catch (error) {
     console.error(`Failed to fetch skill icon for ${skillName}:`, error);
-    // エラーの場合は空のData URIを返す
+    // Return empty Data URI on error
     return '';
   }
 }
 
 /**
- * GitHub Octocat風SVG生成APIエンドポイント（ファミコン風ドット絵アニメーション）
+ * GitHub Octocat-style SVG generation API endpoint (Famicom-style pixel art animation)
  *
- * 使用例:
+ * Usage example:
  * GET /api/mario?text=FULL+STACK+DEVELOPER&skills=React,Vue,Java,Python&bg=5C94FC
  */
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const { text, fontSize, color, bg, skills, font, useSkillIcons, skillIconsTheme } = req.query;
 
-    // パラメータを解析
-    // 注意: width/heightは常に400x250に固定（ユーザー設定不可）
+    // Parse parameters
+    // Note: width/height are fixed at 400x250 (user cannot customize)
     const options = {
       text: parseString(text) || defaultMarioOptions.text,
       fontSize: parseNumber(fontSize) || defaultMarioOptions.fontSize,
@@ -53,32 +53,32 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       skillIconDataUris: {} as Record<string, string>,
     };
 
-    // skillicons.devを使用する場合、各アイコンをData URIとして取得
+    // When using skillicons.dev, fetch each icon as Data URI
     if (options.useSkillIcons) {
       const skillsList = options.skills
         .split(',')
         .map((s) => s.trim())
         .filter((s) => s.length > 0);
 
-      // 並列で全てのアイコンを取得
+      // Fetch all icons in parallel
       const dataUris = await Promise.all(
         skillsList.map((skill) => fetchSkillIconAsDataUri(skill, options.skillIconsTheme))
       );
 
-      // スキル名とData URIをマッピング
+      // Map skill names to Data URIs
       skillsList.forEach((skill, index) => {
         options.skillIconDataUris[skill] = dataUris[index];
       });
     }
 
-    // SVGを生成
+    // Generate SVG
     const svg = generateMarioSvg(options);
 
-    // レスポンスヘッダーを設定
+    // Set response headers
     res.setHeader('Content-Type', 'image/svg+xml; charset=utf-8');
     res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=3600');
 
-    // SVGを返す
+    // Return SVG
     res.status(200).send(svg);
   } catch (error) {
     console.error('SVG generation error:', error);
@@ -87,7 +87,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 }
 
 /**
- * クエリパラメータを文字列として解析
+ * Parse query parameter as string
  */
 function parseString(value: string | string[] | undefined): string | undefined {
   if (Array.isArray(value)) {
@@ -97,7 +97,7 @@ function parseString(value: string | string[] | undefined): string | undefined {
 }
 
 /**
- * クエリパラメータを数値として解析
+ * Parse query parameter as number
  */
 function parseNumber(value: string | string[] | undefined): number | undefined {
   const str = parseString(value);
@@ -109,7 +109,7 @@ function parseNumber(value: string | string[] | undefined): number | undefined {
 }
 
 /**
- * クエリパラメータをブール値として解析
+ * Parse query parameter as boolean
  */
 function parseBoolean(value: string | string[] | undefined): boolean | undefined {
   const str = parseString(value);
@@ -120,7 +120,7 @@ function parseBoolean(value: string | string[] | undefined): boolean | undefined
 }
 
 /**
- * エラー表示用SVGを生成
+ * Generate error display SVG
  */
 function generateErrorSvg(message: string): string {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="50">
