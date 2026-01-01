@@ -2,16 +2,16 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { generateTypingSvg, defaultOptions } from '../src/lib/generateSvg';
 
 /**
- * タイピング風SVG生成APIエンドポイント
+ * Typing-style SVG generation API endpoint
  *
- * 使用例:
+ * Usage example:
  * GET /api/typing?text=HELLO+WORLD&color=E80000&bg=000000&speed=3
  */
 export default function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const { text, fontSize, width, height, color, bg, speed, font } = req.query;
 
-    // パラメータを解析
+    // Parse parameters
     const options = {
       text: parseString(text) || defaultOptions.text,
       fontSize: parseNumber(fontSize) || defaultOptions.fontSize,
@@ -23,14 +23,14 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
       font: parseString(font) || defaultOptions.font,
     };
 
-    // SVGを生成
+    // Generate SVG
     const svg = generateTypingSvg(options);
 
-    // レスポンスヘッダーを設定
+    // Set response headers
     res.setHeader('Content-Type', 'image/svg+xml; charset=utf-8');
     res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=3600');
 
-    // SVGを返す
+    // Return SVG
     res.status(200).send(svg);
   } catch (error) {
     console.error('SVG generation error:', error);
@@ -39,7 +39,7 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
 }
 
 /**
- * クエリパラメータを文字列として解析
+ * Parse query parameter as string
  */
 function parseString(value: string | string[] | undefined): string | undefined {
   if (Array.isArray(value)) {
@@ -49,7 +49,7 @@ function parseString(value: string | string[] | undefined): string | undefined {
 }
 
 /**
- * クエリパラメータを数値として解析
+ * Parse query parameter as number
  */
 function parseNumber(value: string | string[] | undefined): number | undefined {
   const str = parseString(value);
@@ -61,7 +61,7 @@ function parseNumber(value: string | string[] | undefined): number | undefined {
 }
 
 /**
- * エラー表示用SVGを生成
+ * Generate error display SVG
  */
 function generateErrorSvg(message: string): string {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="50">

@@ -1,30 +1,30 @@
 /**
- * タイピング風SVG生成ライブラリ
- * GitHub README対応（SMIL/CSSアニメーション使用、JS不使用）
+ * Typing-style SVG generation library
+ * GitHub README compatible (uses SMIL/CSS animations, no JS)
  */
 
 import { PRESS_START_2P_FONT_BASE64 } from './fontData';
 
 export interface SvgOptions {
-  /** 表示テキスト（カンマ区切りで複数行対応） */
+  /** Display text (comma-separated for multi-line support) */
   text: string;
-  /** フォントサイズ（px） */
+  /** Font size (px) */
   fontSize: number;
-  /** SVG幅（px） */
+  /** SVG width (px) */
   width: number;
-  /** SVG高さ（px） */
+  /** SVG height (px) */
   height: number;
-  /** テキスト色（HEX、#なし） */
+  /** Text color (HEX without #) */
   color: string;
-  /** 背景色（HEX、#なし） */
+  /** Background color (HEX without #) */
   bg: string;
-  /** アニメーション速度（1=遅い、5=速い） */
+  /** Animation speed (1=slow, 5=fast) */
   speed: number;
-  /** フォントファミリー */
+  /** Font family */
   font: string;
 }
 
-/** デフォルト設定 */
+/** Default settings */
 export const defaultOptions: SvgOptions = {
   text: 'Hello World',
   fontSize: 20,
@@ -37,7 +37,7 @@ export const defaultOptions: SvgOptions = {
 };
 
 /**
- * テキストをパースして行配列に変換
+ * Parse text and convert to line array
  */
 function parseTextLines(text: string): string[] {
   return text
@@ -47,7 +47,7 @@ function parseTextLines(text: string): string[] {
 }
 
 /**
- * HEXカラーを検証・正規化
+ * Validate and normalize HEX color
  */
 function normalizeColor(color: string): string {
   const cleaned = color.replace(/^#/, '');
@@ -61,7 +61,7 @@ function normalizeColor(color: string): string {
 }
 
 /**
- * 速度からアニメーション時間を計算（文字あたり）
+ * Calculate animation duration per character from speed
  */
 function getCharDuration(speed: number): number {
   const clampedSpeed = Math.max(1, Math.min(5, speed));
@@ -70,7 +70,7 @@ function getCharDuration(speed: number): number {
 }
 
 /**
- * タイピング風SVGを生成
+ * Generate typing-style SVG
  */
 export function generateTypingSvg(options: Partial<SvgOptions>): string {
   const opts: SvgOptions = { ...defaultOptions, ...options };
@@ -80,12 +80,12 @@ export function generateTypingSvg(options: Partial<SvgOptions>): string {
   const bg = normalizeColor(opts.bg);
   const charDuration = getCharDuration(opts.speed);
 
-  // 行ごとの高さを計算
+  // Calculate height per line
   const lineHeight = opts.fontSize * 1.5;
   const totalTextHeight = lines.length * lineHeight;
   const startY = (opts.height - totalTextHeight) / 2 + opts.fontSize;
 
-  // 各行のアニメーションを生成
+  // Generate animation for each line
   const textElements: string[] = [];
   const cursorPositions: Array<{ x: number; y: number; time: number }> = [];
   let totalDelay = 0;
@@ -94,12 +94,12 @@ export function generateTypingSvg(options: Partial<SvgOptions>): string {
     const y = startY + lineIndex * lineHeight;
     const chars = line.split('');
 
-    // 各文字のX位置を計算（等幅フォント想定）
+    // Calculate X position for each character (assumes monospace font)
     const charWidth = opts.fontSize * 0.6;
     const lineWidth = chars.length * charWidth;
     const startX = (opts.width - lineWidth) / 2;
 
-    // 行の最初の位置をカーソル位置に追加
+    // Add initial line position to cursor positions
     cursorPositions.push({
       x: startX,
       y: y,
@@ -131,7 +131,7 @@ export function generateTypingSvg(options: Partial<SvgOptions>): string {
       />
     </text>`);
 
-      // 次の文字の位置をカーソル位置に追加
+      // Add next character position to cursor positions
       cursorPositions.push({
         x: x + charWidth,
         y: y,
@@ -139,16 +139,16 @@ export function generateTypingSvg(options: Partial<SvgOptions>): string {
       });
     });
 
-    // 次の行の開始遅延を計算
+    // Calculate start delay for next line
     totalDelay += chars.length * charDuration + 0.5;
   });
 
-  // カーソルのアニメーション
+  // Cursor animation
   const cursorHeight = opts.fontSize;
   const totalDuration = totalDelay + 1;
-  const cursorWidth = opts.fontSize * 0.1; // カーソルの幅を細く
+  const cursorWidth = opts.fontSize * 0.1; // Make cursor width thin
 
-  // animateのvalues属性用の位置とタイムを生成
+  // Generate positions and times for animate values attribute
   const xValues = cursorPositions.map((pos) => pos.x).join(';');
   const yValues = cursorPositions
     .map((pos) => pos.y - cursorHeight + 4)
@@ -188,7 +188,7 @@ export function generateTypingSvg(options: Partial<SvgOptions>): string {
       />
     </rect>`;
 
-  // フォントスタイルを生成（Press Start 2P フォントをBase64埋め込み）
+  // Generate font style (embed Press Start 2P font as Base64)
   let fontStyle = '';
   if (opts.font === 'Press Start 2P' && PRESS_START_2P_FONT_BASE64) {
     fontStyle = `
@@ -218,7 +218,7 @@ export function generateTypingSvg(options: Partial<SvgOptions>): string {
 }
 
 /**
- * XML特殊文字をエスケープ
+ * Escape XML special characters
  */
 function escapeXml(str: string): string {
   return str
