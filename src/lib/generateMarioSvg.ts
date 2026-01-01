@@ -572,39 +572,7 @@ function generateRunningMario(opts: MarioSvgOptions): string {
       SCORE: ${skills.length * 100}
     </text>`;
 
-  // コインエフェクト（倒した時に出現）- 位置ベースの衝突判定
-  // Octocatのサイズ計算（スケール2.2、ピクセルサイズ3、10x10ドット）
-  const octocatScale = 2.2;
-  const octocatPixelSize = 3;
-  const octocatWidth = 10 * octocatPixelSize * octocatScale; // 約66ピクセル
-  const iconSize = 50;
-  const collisionX = octocatX + octocatWidth / 2 + iconSize / 2;
-  const animationDuration = 5;
-
-  const coinEffects = skills
-    .map((tech, i) => {
-      const startX = opts.width + 50 + i * 100; // 技術アイコンと同じ計算式
-      const delay = 1.5 + i * 1.0; // 技術アイコンと同じタイミング
-      // 各アイコンの移動距離（開始位置から画面外まで）
-      const totalMoveDistance = startX + 100;
-      const moveToCollision = startX - collisionX;
-      const hitTime = delay + (moveToCollision / totalMoveDistance) * animationDuration;
-      return `
-      <g>
-        ${createCoin(octocatX + 70, octocatY - 20, hitTime)}
-        <animateTransform
-          attributeName="transform"
-          type="translate"
-          values="0,0; 0,-50"
-          dur="0.8s"
-          begin="${hitTime}s"
-          fill="freeze"
-        />
-      </g>`;
-    })
-    .join('');
-
-  return `${octocat}${techIcons}${scoreText}${coinEffects}`;
+  return `${octocat}${techIcons}${scoreText}`;
 }
 
 /**
