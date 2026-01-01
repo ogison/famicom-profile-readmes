@@ -645,12 +645,109 @@
               <button class="copy-btn" onclick="copyMarkdown()">Copy</button>
             </div>
           </div>
+
+          <div class="markdown-section" id="skillIconsUrlSection" style="display: none">
+            <p class="section-label">SkillIcons URL</p>
+            <div class="url-wrapper">
+              <input type="text" id="skillIconsUrl" class="markdown-code" readonly />
+              <button class="copy-btn" onclick="copySkillIconsUrl()">Copy</button>
+            </div>
+          </div>
+
+          <div class="markdown-section" id="htmlEmbedSection" style="display: none">
+            <p class="section-label">HTML Embed (for README)</p>
+            <div class="url-wrapper">
+              <textarea id="htmlEmbed" class="markdown-code" readonly rows="5" style="resize: vertical;"></textarea>
+              <button class="copy-btn" onclick="copyHtmlEmbed()">Copy</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
     <script>
       const baseUrl = window.location.origin;
+
+      // Skill name mapping to skillicons.dev format
+      const skillIconMapping = {
+        React: 'react',
+        Vue: 'vue',
+        Angular: 'angular',
+        Java: 'java',
+        Python: 'python',
+        Node: 'nodejs',
+        TypeScript: 'ts',
+        JavaScript: 'js',
+        Go: 'go',
+        Rust: 'rust',
+        PHP: 'php',
+        Ruby: 'ruby',
+        'C++': 'cpp',
+        C: 'c',
+        'C#': 'cs',
+        Docker: 'docker',
+        Kubernetes: 'kubernetes',
+        AWS: 'aws',
+        Git: 'git',
+        GitHub: 'github',
+        GitLab: 'gitlab',
+        HTML: 'html',
+        CSS: 'css',
+        MongoDB: 'mongodb',
+        MySQL: 'mysql',
+        PostgreSQL: 'postgres',
+        Redis: 'redis',
+        Figma: 'figma',
+        Linux: 'linux',
+        VSCode: 'vscode',
+        Django: 'django',
+        Flask: 'flask',
+        Laravel: 'laravel',
+        Express: 'express',
+        Kotlin: 'kotlin',
+        Swift: 'swift',
+        Flutter: 'flutter',
+        NextJS: 'nextjs',
+        NuxtJS: 'nuxtjs',
+        Svelte: 'svelte',
+        Tailwind: 'tailwind',
+        Bootstrap: 'bootstrap',
+        Sass: 'sass',
+        Webpack: 'webpack',
+        Vite: 'vite',
+        Firebase: 'firebase',
+        Supabase: 'supabase',
+        GraphQL: 'graphql',
+        Prisma: 'prisma',
+        Vercel: 'vercel',
+        Netlify: 'netlify',
+        Heroku: 'heroku',
+        Nginx: 'nginx',
+        Bash: 'bash',
+        PowerShell: 'powershell',
+        Vim: 'vim',
+        Neovim: 'neovim',
+        Electron: 'electron',
+        'React Native': 'react',
+        Unity: 'unity',
+        Unreal: 'unreal',
+        Blender: 'blender',
+        Postman: 'postman',
+        Jest: 'jest',
+        Cypress: 'cypress',
+        Selenium: 'selenium',
+        Jenkins: 'jenkins',
+        Azure: 'azure',
+        GCP: 'gcp',
+        Cloudflare: 'cloudflare',
+        DigitalOcean: 'digitalocean',
+        Terraform: 'terraform',
+        Ansible: 'ansible',
+      };
+
+      function getSkillIconName(tech) {
+        return skillIconMapping[tech] || tech.toLowerCase().replace(/[^a-z0-9]/g, '');
+      }
 
       // Elements
       const modeSelect = document.getElementById('mode');
@@ -676,6 +773,10 @@
       const preview = document.getElementById('preview');
       const apiUrlInput = document.getElementById('apiUrl');
       const markdownCode = document.getElementById('markdownCode');
+      const skillIconsUrlSection = document.getElementById('skillIconsUrlSection');
+      const skillIconsUrlInput = document.getElementById('skillIconsUrl');
+      const htmlEmbedSection = document.getElementById('htmlEmbedSection');
+      const htmlEmbedInput = document.getElementById('htmlEmbed');
 
       // Mode change handler
       const speedGroup = document.getElementById('speedGroup');
@@ -690,6 +791,8 @@
         if (isMarioMode) {
           skillsGroup.style.display = 'block';
           iconThemeGroup.style.display = 'block';
+          skillIconsUrlSection.style.display = 'block';
+          htmlEmbedSection.style.display = 'block';
           textGroup.style.display = 'none';
           speedGroup.style.display = 'none';
           colorRow.style.display = 'none';
@@ -699,6 +802,8 @@
         } else {
           skillsGroup.style.display = 'none';
           iconThemeGroup.style.display = 'none';
+          skillIconsUrlSection.style.display = 'none';
+          htmlEmbedSection.style.display = 'none';
           textGroup.style.display = 'block';
           speedGroup.style.display = 'block';
           colorRow.style.display = 'grid';
@@ -825,6 +930,24 @@
         }
         apiUrlInput.value = url;
         markdownCode.value = `![Famicom Profile](${url})`;
+
+        // Generate SkillIcons URL and HTML embed for mario mode
+        const isMarioMode = modeSelect.value === 'mario';
+        if (isMarioMode) {
+          const skills = skillsInput.value.split(',').map(s => s.trim()).filter(s => s.length > 0);
+          const iconNames = skills.map(skill => getSkillIconName(skill)).join(',');
+          const theme = iconThemeSelect.value;
+          const skillIconsUrl = `https://skillicons.dev/icons?i=${iconNames}&theme=${theme}`;
+
+          skillIconsUrlInput.value = skillIconsUrl;
+
+          const htmlEmbed = `<p align="center">
+  <a href="https://skillicons.dev">
+    <img src="${skillIconsUrl}" />
+  </a>
+</p>`;
+          htmlEmbedInput.value = htmlEmbed;
+        }
       }
 
       function copyUrl() {
@@ -841,6 +964,30 @@
 
       function copyMarkdown() {
         navigator.clipboard.writeText(markdownCode.value).then(() => {
+          const btn = event.target;
+          btn.textContent = 'Copied!';
+          btn.classList.add('copied');
+          setTimeout(() => {
+            btn.textContent = 'Copy';
+            btn.classList.remove('copied');
+          }, 2000);
+        });
+      }
+
+      function copySkillIconsUrl() {
+        navigator.clipboard.writeText(skillIconsUrlInput.value).then(() => {
+          const btn = event.target;
+          btn.textContent = 'Copied!';
+          btn.classList.add('copied');
+          setTimeout(() => {
+            btn.textContent = 'Copy';
+            btn.classList.remove('copied');
+          }, 2000);
+        });
+      }
+
+      function copyHtmlEmbed() {
+        navigator.clipboard.writeText(htmlEmbedInput.value).then(() => {
           const btn = event.target;
           btn.textContent = 'Copied!';
           btn.classList.add('copied');
