@@ -231,6 +231,37 @@
         color: #e94560;
         margin-top: 4px;
       }
+      .skill-category {
+        margin-bottom: 16px;
+      }
+      .category-title {
+        font-weight: bold;
+        color: #e94560;
+        margin-bottom: 8px;
+        font-size: 13px;
+        border-bottom: 1px solid #e9456033;
+        padding-bottom: 4px;
+      }
+      .skill-checkbox {
+        display: block;
+        padding: 6px 8px;
+        margin-bottom: 4px;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background 0.2s;
+        font-size: 13px;
+        color: #ccc;
+      }
+      .skill-checkbox:hover {
+        background: #1a2a4a;
+      }
+      .skill-checkbox input[type='checkbox'] {
+        margin-right: 8px;
+        cursor: pointer;
+        width: 16px;
+        height: 16px;
+        vertical-align: middle;
+      }
     </style>
   </head>
   <body>
@@ -263,8 +294,129 @@
               id="skills"
               value="React,Vue,Java,Python,Node"
               placeholder="技術スタックをカンマ区切りで入力"
+              readonly
             />
-            <p class="hint">倒す技術のアイコンを指定します</p>
+            <p class="hint">倒す技術のアイコンを指定します（下のチェックボックスから選択）</p>
+
+            <div id="skillsCheckboxContainer" style="max-height: 300px; overflow-y: auto; margin-top: 10px; border: 1px solid #0f3460; border-radius: 6px; padding: 12px; background: #0f3460;">
+              <!-- Frontend -->
+              <div class="skill-category">
+                <div class="category-title">Frontend</div>
+                <label class="skill-checkbox"><input type="checkbox" value="React" checked> React</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Vue" checked> Vue</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Angular"> Angular</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Svelte"> Svelte</label>
+                <label class="skill-checkbox"><input type="checkbox" value="NextJS"> Next.js</label>
+                <label class="skill-checkbox"><input type="checkbox" value="NuxtJS"> Nuxt.js</label>
+                <label class="skill-checkbox"><input type="checkbox" value="HTML"> HTML</label>
+                <label class="skill-checkbox"><input type="checkbox" value="CSS"> CSS</label>
+              </div>
+
+              <!-- Languages -->
+              <div class="skill-category">
+                <div class="category-title">Languages</div>
+                <label class="skill-checkbox"><input type="checkbox" value="JavaScript"> JavaScript</label>
+                <label class="skill-checkbox"><input type="checkbox" value="TypeScript"> TypeScript</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Python" checked> Python</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Java" checked> Java</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Go"> Go</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Rust"> Rust</label>
+                <label class="skill-checkbox"><input type="checkbox" value="C"> C</label>
+                <label class="skill-checkbox"><input type="checkbox" value="C++"> C++</label>
+                <label class="skill-checkbox"><input type="checkbox" value="C#"> C#</label>
+                <label class="skill-checkbox"><input type="checkbox" value="PHP"> PHP</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Ruby"> Ruby</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Kotlin"> Kotlin</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Swift"> Swift</label>
+              </div>
+
+              <!-- Backend -->
+              <div class="skill-category">
+                <div class="category-title">Backend</div>
+                <label class="skill-checkbox"><input type="checkbox" value="Node" checked> Node.js</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Express"> Express</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Django"> Django</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Flask"> Flask</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Laravel"> Laravel</label>
+              </div>
+
+              <!-- Database -->
+              <div class="skill-category">
+                <div class="category-title">Database</div>
+                <label class="skill-checkbox"><input type="checkbox" value="MongoDB"> MongoDB</label>
+                <label class="skill-checkbox"><input type="checkbox" value="MySQL"> MySQL</label>
+                <label class="skill-checkbox"><input type="checkbox" value="PostgreSQL"> PostgreSQL</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Redis"> Redis</label>
+              </div>
+
+              <!-- DevOps / Cloud -->
+              <div class="skill-category">
+                <div class="category-title">DevOps / Cloud</div>
+                <label class="skill-checkbox"><input type="checkbox" value="Docker"> Docker</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Kubernetes"> Kubernetes</label>
+                <label class="skill-checkbox"><input type="checkbox" value="AWS"> AWS</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Azure"> Azure</label>
+                <label class="skill-checkbox"><input type="checkbox" value="GCP"> GCP</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Git"> Git</label>
+                <label class="skill-checkbox"><input type="checkbox" value="GitHub"> GitHub</label>
+                <label class="skill-checkbox"><input type="checkbox" value="GitLab"> GitLab</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Nginx"> Nginx</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Jenkins"> Jenkins</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Terraform"> Terraform</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Ansible"> Ansible</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Vercel"> Vercel</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Netlify"> Netlify</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Heroku"> Heroku</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Cloudflare"> Cloudflare</label>
+                <label class="skill-checkbox"><input type="checkbox" value="DigitalOcean"> DigitalOcean</label>
+              </div>
+
+              <!-- Styling -->
+              <div class="skill-category">
+                <div class="category-title">Styling / Design</div>
+                <label class="skill-checkbox"><input type="checkbox" value="Tailwind"> Tailwind CSS</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Bootstrap"> Bootstrap</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Sass"> Sass</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Figma"> Figma</label>
+              </div>
+
+              <!-- Tools -->
+              <div class="skill-category">
+                <div class="category-title">Tools</div>
+                <label class="skill-checkbox"><input type="checkbox" value="VSCode"> VS Code</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Linux"> Linux</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Bash"> Bash</label>
+                <label class="skill-checkbox"><input type="checkbox" value="PowerShell"> PowerShell</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Vim"> Vim</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Neovim"> Neovim</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Postman"> Postman</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Webpack"> Webpack</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Vite"> Vite</label>
+              </div>
+
+              <!-- Testing -->
+              <div class="skill-category">
+                <div class="category-title">Testing</div>
+                <label class="skill-checkbox"><input type="checkbox" value="Jest"> Jest</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Cypress"> Cypress</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Selenium"> Selenium</label>
+              </div>
+
+              <!-- Other -->
+              <div class="skill-category">
+                <div class="category-title">Other</div>
+                <label class="skill-checkbox"><input type="checkbox" value="Firebase"> Firebase</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Supabase"> Supabase</label>
+                <label class="skill-checkbox"><input type="checkbox" value="GraphQL"> GraphQL</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Prisma"> Prisma</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Electron"> Electron</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Flutter"> Flutter</label>
+                <label class="skill-checkbox"><input type="checkbox" value="React Native"> React Native</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Unity"> Unity</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Unreal"> Unreal Engine</label>
+                <label class="skill-checkbox"><input type="checkbox" value="Blender"> Blender</label>
+              </div>
+            </div>
           </div>
 
           <div class="form-group" id="iconThemeGroup" style="display: none">
@@ -433,6 +585,19 @@
 
       // Icon theme change handler
       iconThemeSelect.addEventListener('change', updatePreview);
+
+      // Skills checkboxes handler
+      function updateSkillsFromCheckboxes() {
+        const checkboxes = document.querySelectorAll('#skillsCheckboxContainer input[type="checkbox"]:checked');
+        const selectedSkills = Array.from(checkboxes).map((cb) => cb.value);
+        skillsInput.value = selectedSkills.join(',');
+        updatePreview();
+      }
+
+      // Add event listeners to all skill checkboxes
+      document.querySelectorAll('#skillsCheckboxContainer input[type="checkbox"]').forEach((checkbox) => {
+        checkbox.addEventListener('change', updateSkillsFromCheckboxes);
+      });
 
       // Sync color picker with hex input
       colorPicker.addEventListener('input', (e) => {
