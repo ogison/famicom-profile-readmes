@@ -363,9 +363,6 @@ function createTechIcon(
   // Distance from icon's start position to collision
   const moveToCollision = x - collisionX;
 
-  // Calculate hit time (time when icon reaches collision position)
-  const hitTime = delay + (moveToCollision / totalMoveDistance) * animationDuration;
-
   // When using skillicons.dev
   let badge: string;
   if (opts.useSkillIcons) {
@@ -456,10 +453,10 @@ function createTechIcon(
         <animate
           attributeName="opacity"
           values="1;1;0"
-          keyTimes="0;0.7;1"
-          dur="0.8s"
-          begin="${hitTime}s"
-          fill="freeze"
+          keyTimes="0;${collisionKeyTime};1"
+          dur="${totalAnimDuration}s"
+          begin="${delay}s"
+          repeatCount="indefinite"
         />
       </g>
 
@@ -469,10 +466,10 @@ function createTechIcon(
         <animate
           attributeName="opacity"
           values="1;1;0"
-          keyTimes="0;0.7;1"
-          dur="0.8s"
-          begin="${hitTime}s"
-          fill="freeze"
+          keyTimes="0;${collisionKeyTime};1"
+          dur="${totalAnimDuration}s"
+          begin="${delay}s"
+          repeatCount="indefinite"
         />
       </text>
 
@@ -484,7 +481,7 @@ function createTechIcon(
         keyTimes="0; ${collisionKeyTime}; 1"
         dur="${totalAnimDuration}s"
         begin="${delay}s"
-        fill="freeze"
+        repeatCount="indefinite"
       />
     </g>`;
 }
