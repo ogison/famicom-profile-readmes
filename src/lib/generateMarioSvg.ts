@@ -326,8 +326,8 @@ function getTechColor(tech: string): { bg: string; text: string } {
  * Calculate fly direction (unified to upper-right diagonal)
  */
 function getFlyDirection(index: number): { x: number; y: number } {
-  // All fly to upper-right diagonal
-  return { x: 200, y: -400 };
+  // All fly straight at 45 degrees to the upper right
+  return { x: 350, y: -350 };
 }
 
 /**
