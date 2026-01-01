@@ -417,6 +417,14 @@ function createTechIcon(
   `;
   }
 
+  // アニメーション時間の計算
+  const collisionDuration = (moveToCollision / totalMoveDistance) * animationDuration; // 衝突までの時間
+  const flyDuration = 0.8; // 飛んでいく時間
+  const totalAnimDuration = collisionDuration + flyDuration;
+
+  // keyTimesの計算（0から1の範囲で、衝突時刻の位置を計算）
+  const collisionKeyTime = collisionDuration / totalAnimDuration;
+
   return `
     <g id="tech-${tech}-${delay}">
       <g>
@@ -444,22 +452,14 @@ function createTechIcon(
         />
       </text>
 
-      <!-- 右から左への移動アニメーション -->
-      <animateMotion
-        path="M 0,0 L -${totalMoveDistance},0"
-        dur="5s"
-        begin="${delay}s"
-        fill="freeze"
-      />
-
-      <!-- ヒット時の画面外に飛ぶアニメーション -->
+      <!-- 移動アニメーション：衝突まで水平移動、衝突後は斜め上に真っ直ぐ飛ぶ -->
       <animateTransform
         attributeName="transform"
         type="translate"
-        additive="sum"
-        values="0,0; ${flyDir.x},${flyDir.y}"
-        dur="0.8s"
-        begin="${hitTime}s"
+        values="0,0; -${moveToCollision},0; ${-moveToCollision + flyDir.x},${flyDir.y}"
+        keyTimes="0; ${collisionKeyTime}; 1"
+        dur="${totalAnimDuration}s"
+        begin="${delay}s"
         fill="freeze"
       />
     </g>`;
