@@ -28,7 +28,7 @@ async function fetchSkillIconAsDataUri(skillName: string, theme: 'light' | 'dark
 }
 
 /**
- * GitHub Octocat-style SVG generation API endpoint (Famicom-style pixel art animation)
+ * GitHub Ruby icon-style SVG generation API endpoint (Famicom-style pixel art animation)
  *
  * Usage example:
  * GET /api/mario?text=FULL+STACK+DEVELOPER&skills=React,Vue,Java,Python&bg=5C94FC

@@ -1,5 +1,5 @@
 /**
- * GitHub Octocat-style SVG generation library (Famicom-style pixel art animation)
+ * GitHub Ruby icon-style SVG generation library (Famicom-style pixel art animation)
  * GitHub README compatible (uses SMIL/CSS animations, no JS)
  */
 
@@ -71,7 +71,7 @@ function escapeXml(str: string): string {
 }
 
 /**
- * Draw Octocat character in pixel art (3 variations)
+ * Draw Ruby gem character in pixel art (3 variations)
  */
 function createOctocatCharacter(
   x: number,
@@ -81,52 +81,52 @@ function createOctocatCharacter(
 ): string {
   const s = scale * 3; // Pixel size
 
-  // Octocat pixel art patterns (10x10 pixels, 3 variations)
+  // Ruby gem pixel art patterns (10x10 pixels, 3 variations)
   const octocatVariants = [
-    // Variation 1: Basic front-facing form
+    // Variation 1: Basic Ruby gem form
     [
-      [0, 0, 0, 1, 0, 0, 1, 0, 0, 0], // Cat ears
-      [0, 0, 1, 1, 0, 0, 1, 1, 0, 0],
-      [0, 1, 2, 2, 2, 2, 2, 2, 1, 0], // Head
-      [1, 2, 2, 3, 2, 2, 3, 2, 2, 1],
-      [1, 2, 2, 2, 2, 2, 2, 2, 2, 1], // Face
-      [1, 2, 2, 4, 4, 4, 4, 2, 2, 1],
-      [0, 1, 2, 2, 2, 2, 2, 2, 1, 0], // Body
-      [0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
-      [0, 1, 0, 1, 0, 0, 1, 0, 1, 0], // Tentacle legs
-      [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+      [0, 0, 0, 0, 1, 1, 0, 0, 0, 0], // Top facet
+      [0, 0, 0, 1, 3, 3, 1, 0, 0, 0],
+      [0, 0, 1, 3, 3, 3, 2, 1, 0, 0], // Upper facets with highlights
+      [0, 1, 3, 3, 3, 2, 2, 2, 1, 0],
+      [1, 2, 3, 3, 2, 2, 2, 2, 2, 1], // Widest part
+      [0, 1, 2, 2, 2, 2, 2, 2, 1, 0], // Lower facets
+      [0, 0, 1, 2, 2, 2, 2, 1, 0, 0],
+      [0, 0, 0, 1, 2, 2, 1, 0, 0, 0],
+      [0, 0, 0, 0, 1, 1, 0, 0, 0, 0], // Bottom point
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     ],
-    // Variation 2: Running form (legs moving)
+    // Variation 2: Slightly rotated Ruby gem (animation frame 1)
     [
-      [0, 0, 0, 1, 0, 0, 1, 0, 0, 0], // Cat ears
-      [0, 0, 1, 1, 0, 0, 1, 1, 0, 0],
-      [0, 1, 2, 2, 2, 2, 2, 2, 1, 0], // Head
-      [1, 2, 2, 3, 2, 2, 3, 2, 2, 1],
-      [1, 2, 2, 2, 2, 2, 2, 2, 2, 1], // Face
-      [1, 2, 2, 4, 4, 4, 4, 2, 2, 1],
-      [0, 1, 2, 2, 2, 2, 2, 2, 1, 0], // Body
-      [0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
-      [0, 0, 1, 0, 1, 1, 0, 1, 0, 0], // Tentacle legs (movement 1)
-      [0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
+      [0, 0, 0, 1, 1, 0, 0, 0, 0, 0], // Top facet rotated
+      [0, 0, 1, 3, 3, 1, 0, 0, 0, 0],
+      [0, 1, 3, 3, 3, 2, 1, 0, 0, 0], // Upper facets
+      [1, 3, 3, 3, 2, 2, 2, 1, 0, 0],
+      [1, 2, 3, 2, 2, 2, 2, 2, 1, 0], // Widest part rotated
+      [0, 1, 2, 2, 2, 2, 2, 1, 0, 0], // Lower facets
+      [0, 0, 1, 2, 2, 2, 1, 0, 0, 0],
+      [0, 0, 0, 1, 2, 1, 0, 0, 0, 0],
+      [0, 0, 0, 0, 1, 0, 0, 0, 0, 0], // Bottom point
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     ],
-    // Variation 3: Jumping form
+    // Variation 3: Shining Ruby gem (animation frame 2)
     [
-      [0, 0, 0, 1, 0, 0, 1, 0, 0, 0], // Cat ears
-      [0, 0, 1, 1, 0, 0, 1, 1, 0, 0],
-      [0, 1, 2, 2, 2, 2, 2, 2, 1, 0], // Head
-      [1, 2, 2, 3, 2, 2, 3, 2, 2, 1],
-      [1, 2, 2, 2, 2, 2, 2, 2, 2, 1], // Face
-      [1, 2, 2, 4, 4, 4, 4, 2, 2, 1],
-      [0, 1, 2, 2, 2, 2, 2, 2, 1, 0], // Body
-      [0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
-      [1, 0, 0, 1, 0, 0, 1, 0, 0, 1], // Tentacle legs (spread out)
-      [0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
+      [0, 0, 0, 0, 1, 1, 0, 0, 0, 0], // Top facet
+      [0, 0, 0, 1, 4, 3, 1, 0, 0, 0],
+      [0, 0, 1, 4, 3, 3, 2, 1, 0, 0], // Upper facets with extra shine
+      [0, 1, 3, 3, 3, 2, 2, 2, 1, 0],
+      [1, 2, 3, 3, 2, 2, 2, 2, 2, 1], // Widest part
+      [0, 1, 2, 2, 2, 2, 2, 2, 1, 0], // Lower facets
+      [0, 0, 1, 2, 2, 2, 2, 1, 0, 0],
+      [0, 0, 0, 1, 2, 2, 1, 0, 0, 0],
+      [0, 0, 0, 0, 1, 1, 0, 0, 0, 0], // Bottom point
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     ],
   ];
 
-  // Color definitions (GitHub Octocat-style)
-  // 0: Transparent, 1: Black (outline), 2: Gray (body), 3: White (eyes), 4: Pink (mouth)
-  const colors = ['none', '#24292f', '#6e7781', '#ffffff', '#ff69b4'];
+  // Color definitions (Ruby gem style)
+  // 0: Transparent, 1: Black (outline), 2: Dark red (Ruby body), 3: Bright red (highlights), 4: White shine
+  const colors = ['none', '#24292f', '#CC342D', '#FF6B6B', '#ffffff'];
 
   const pixels = octocatVariants[variant % 3];
 
@@ -348,12 +348,12 @@ function createTechIcon(
   const flyDir = getFlyDirection(index);
 
   // Position-based collision detection
-  // Calculate Octocat size (scale 2.2, pixel size 3, 10x10 dots)
+  // Calculate Ruby gem size (scale 2.2, pixel size 3, 10x10 dots)
   const octocatScale = 2.2;
   const octocatPixelSize = 3;
   const octocatWidth = 10 * octocatPixelSize * octocatScale; // About 66 pixels
 
-  // Collision position (where Octocat's center and icon's center overlap)
+  // Collision position (where Ruby gem's center and icon's center overlap)
   const collisionX = octocatX + octocatWidth / 2 + iconSize / 2;
 
   // Icon movement parameters (move from each icon's start position to off-screen)
@@ -466,7 +466,7 @@ function createTechIcon(
 }
 
 /**
- * Octocat running and knocking down tech icons animation
+ * Ruby gem running and knocking down tech icons animation
  */
 function generateRunningMario(opts: MarioSvgOptions): string {
   // Parse tech stack
@@ -475,15 +475,15 @@ function generateRunningMario(opts: MarioSvgOptions): string {
     .map((s) => s.trim())
     .filter((s) => s.length > 0);
 
-  // Octocat position (left-aligned for width 400)
+  // Ruby gem position (left-aligned for width 400)
   const octocatY = opts.height - 130;
   const octocatX = 50;
 
-  // Octocat character (running animation switching between 3 variations)
+  // Ruby gem character (running animation switching between 3 variations)
   const octocat = `
-    <g id="octocat-runner">
+    <g id="ruby-runner">
       <!-- Variation 1: Basic form -->
-      <g id="octocat-var-0">
+      <g id="ruby-var-0">
         ${createOctocatCharacter(octocatX, octocatY, 2.2, 0)}
         <animate
           attributeName="opacity"
@@ -493,8 +493,8 @@ function generateRunningMario(opts: MarioSvgOptions): string {
           repeatCount="indefinite"
         />
       </g>
-      <!-- Variation 2: Running -->
-      <g id="octocat-var-1">
+      <!-- Variation 2: Rotating -->
+      <g id="ruby-var-1">
         ${createOctocatCharacter(octocatX, octocatY, 2.2, 1)}
         <animate
           attributeName="opacity"
@@ -504,8 +504,8 @@ function generateRunningMario(opts: MarioSvgOptions): string {
           repeatCount="indefinite"
         />
       </g>
-      <!-- Variation 3: Jump -->
-      <g id="octocat-var-2">
+      <!-- Variation 3: Shining -->
+      <g id="ruby-var-2">
         ${createOctocatCharacter(octocatX, octocatY, 2.2, 2)}
         <animate
           attributeName="opacity"
@@ -556,14 +556,14 @@ function generateRunningMario(opts: MarioSvgOptions): string {
 }
 
 /**
- * Generate GitHub Octocat-style SVG (Famicom-style pixel art)
+ * Generate GitHub Ruby icon-style SVG (Famicom-style pixel art)
  */
 export function generateMarioSvg(options: Partial<MarioSvgOptions>): string {
   const opts: MarioSvgOptions = { ...defaultMarioOptions, ...options };
 
   const bg = normalizeColor(opts.bg);
 
-  // Octocat running and knocking down tech animation
+  // Ruby gem running and knocking down tech animation
   const content = generateRunningMario(opts);
 
   // Generate font style (embed Press Start 2P font as Base64)
