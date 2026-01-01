@@ -386,6 +386,7 @@ function createTechIcon(
       width="${iconSize}"
       height="${iconSize}"
       href="${skillIconUrl}"
+      xlink:href="${skillIconUrl}"
       preserveAspectRatio="xMidYMid meet"
     />
   `;
@@ -631,6 +632,7 @@ export function generateMarioSvg(options: Partial<MarioSvgOptions>): string {
 
   return `<svg
   xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="${opts.width}"
   height="${opts.height}"
   viewBox="0 0 ${opts.width} ${opts.height}"
