@@ -616,9 +616,9 @@ function generateRunningMario(opts: MarioSvgOptions): string {
       ${scoreElements}
     </g>`;
 
-  // Clear screen (appears when score reaches 100)
-  const hasClearScreen = maxScore >= 100;
-  const clearTime = hasClearScreen ? collisionTimes[99] : 999;
+  // Clear screen (appears when score reaches 50)
+  const hasClearScreen = maxScore >= 50;
+  const clearTime = hasClearScreen ? collisionTimes[49] : 999;
   const clearScreen = hasClearScreen ? `
     <g id="game-elements">
       ${octocat}
@@ -659,7 +659,7 @@ function generateRunningMario(opts: MarioSvgOptions): string {
         stroke-width="2"
         paint-order="stroke"
       >
-        SCORE: 100
+        SCORE: 50
       </text>
       <animate
         attributeName="opacity"
